@@ -24,15 +24,11 @@ class Home extends Component {
     return (
         <Wrapper>
             <Row>
-                <Col size="md-4">
+                <Col size="12">
                     <Jumbotron>
                     <h1>GET IT TOGETHER</h1>
                     <h4>Personal Financial Website</h4>
                     </Jumbotron>
-                </Col>
-                <Col size="md-4">
-                </Col>
-                <Col size="md-4">
                 </Col>
             </Row>
         </Wrapper>

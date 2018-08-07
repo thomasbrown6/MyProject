@@ -9,14 +9,14 @@ const Nav = () => (
       <p className="navbar-subname">TOGETHER</p>
     </a>
 
-    <ul className="nav justify-content-center">
+    <ul className="nav nav-tabs justify-content-center">
       <li className="nav-item">
       <Link
           to="/"
           className={
             window.location.pathname === "/"
               ? "nav-link active homeTab"
-              : "nav-link"
+              : "nav-link homeTab"
           }
         >
           HOME

@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Nav from "./components/Nav";
 import { Container } from "./components/Grid";
+import "./App.css";
 
 const App = () => (
   <Router>
-    <div>
+    <div> 
       <Container>
         <Nav />
         <Switch>

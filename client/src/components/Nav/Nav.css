@@ -1,7 +1,4 @@
-.nav-link {
-    color: black;
-    margin: 0 14px;
-}
+
 
 .navbar-name,
 .navbar-subname {
@@ -11,9 +8,10 @@
 
 .navbar {
     margin-bottom: 30px;
+    border-bottom-color: black;
 }
 .accountTab {
-    margin-left: 265px;
+    margin-left: 400px;
 }
 
 .navbar-subname {
@@ -26,4 +24,9 @@
 
 .signoutTab {
     margin-left: -5px;
+}
+
+a,
+a:hover {
+    color: royalblue;
 }
