@@ -1,0 +1,29 @@
+.nav-link {
+    color: black;
+    margin: 0 14px;
+}
+
+.navbar-name,
+.navbar-subname {
+    margin: 0;
+    text-align: center;
+}
+
+.navbar {
+    margin-bottom: 30px;
+}
+.accountTab {
+    margin-left: 265px;
+}
+
+.navbar-subname {
+    font-size: 16px;
+}
+
+.homeTab {
+    margin-left: 40px;
+}
+
+.signoutTab {
+    margin-left: -5px;
+}
