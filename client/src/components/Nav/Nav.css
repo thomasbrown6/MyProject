@@ -1,0 +1,32 @@
+
+
+.navbar-name,
+.navbar-subname {
+    margin: 0;
+    text-align: center;
+}
+
+.navbar {
+    margin-bottom: 30px;
+    border-bottom-color: black;
+}
+.accountTab {
+    margin-left: 400px;
+}
+
+.navbar-subname {
+    font-size: 16px;
+}
+
+.homeTab {
+    margin-left: 40px;
+}
+
+.signoutTab {
+    margin-left: -5px;
+}
+
+a,
+a:hover {
+    color: royalblue;
+}
