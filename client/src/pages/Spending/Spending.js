@@ -66,7 +66,7 @@ class Spending extends Component {
                             value={this.state.date}
                             onChange={this.handleInputChange}
                             name="date"
-                            placeholder="Enter date"
+                            placeholder="Select date"
                         />
                         <FormBtn
                             disabled={!(this.state.item && this.state.category && this.state.amount && this.state.date)}
