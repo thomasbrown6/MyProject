@@ -7,10 +7,10 @@ router.route("/")
   .post(billsController.create);
 
 // Matches with "/api/bills/:id", may be needed later
-// router
-//   .route("/:id")
-//   .get(billsController.findById)
-//   .put(billsController.update)
-//   .delete(billsController.remove);
+router
+  .route("/:id")
+  .get(billsController.findById)
+  .put(billsController.update)
+  .delete(billsController.remove);
 
 module.exports = router;
