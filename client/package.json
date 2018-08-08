@@ -5,8 +5,9 @@
   "proxy": "http://localhost:3001/",
   "dependencies": {
     "axios": "^0.16.2",
+    "moment": "^2.22.2",
     "react": "^16.0.0",
-    "react-day-picker": "^7.1.10",
+    "react-big-calendar": "^0.19.2",
     "react-dom": "^16.0.0",
     "react-router-dom": "^4.1.2",
     "react-scripts": "1.0.14"

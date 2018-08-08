@@ -22,9 +22,6 @@ class Spending extends Component {
     });
   };
 
-  handleDate = () => {
-      datePicker();
-  }
 
   handleFormSubmit = event => {
     event.preventDefault();
@@ -67,7 +64,6 @@ class Spending extends Component {
                         />
                         <Input
                             value={this.state.date}
-                            onClick={this.handleDate}
                             onChange={this.handleInputChange}
                             name="date"
                             placeholder="Enter date"
