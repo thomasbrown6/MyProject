@@ -48,14 +48,14 @@ const Nav = () => (
       </li>
       <li className="nav-item">
         <Link
-          to="/expenses"
+          to="/bills"
           className={
-            window.location.pathname === "/expenses"
-              ? "nav-link active expenseTab"
-              : "nav-link expenseTab"
+            window.location.pathname === "/bills"
+              ? "nav-link active billTab"
+              : "nav-link billTab"
           }
         >
-          EXPENSES
+          BILLS
         </Link>
       </li>
       <li className="nav-item">
