@@ -4,7 +4,7 @@ export default {
   // ============================
   // BILL FUNCTIONS
   // ============================
-  
+
   // Gets all bills
   getBills: function() {
     return axios.get("/api/bills");
@@ -19,6 +19,7 @@ export default {
   },
   // Saves a bill to the database
   saveBill: function(billData) {
+    console.log(billData);
     return axios.post("/api/bills", billData);
   },
   // Updates a bill to the database
@@ -46,6 +47,8 @@ export default {
   },
   // Saves a spending to the database
   saveSpending: function(spendingData) {
+    console.log("Hitting API.js")
+    console.log(spendingData)
     return axios.post("/api/spending", spendingData);
   },
   // Updates a spending to the database

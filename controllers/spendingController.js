@@ -16,6 +16,7 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
+    console.log("Hitting spending controller")
     console.log(req.body);
     db.Spending
       .create(req.body)

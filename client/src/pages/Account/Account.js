@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
-import { TableHead, TableRow } from "../../components/Table";
 import { Card } from "../../components/Card";
 import API from "../../utils/API";
 import "./Account.css";

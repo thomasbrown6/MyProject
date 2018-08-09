@@ -116,8 +116,7 @@ class Bills extends Component {
                   !(
                     this.state.item &&
                     this.state.category &&
-                    this.state.amount &&
-                    this.state.date
+                    this.state.amount
                   )
                 }
                 onClick={this.handleFormSubmit}

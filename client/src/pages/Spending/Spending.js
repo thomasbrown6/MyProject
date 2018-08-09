@@ -53,6 +53,7 @@ class Spending extends Component {
 
 
   handleFormSubmit = event => {
+      
     event.preventDefault();
     if (this.state.item && this.state.category && this.state.amount) {
         API.saveSpending({
@@ -62,7 +63,7 @@ class Spending extends Component {
             date: this.state.date
         })      // need to load spending
             .then(res => console.log(res))
-            .catch(err => console.log(err));
+            .catch(err => console.log("Front end error" + err));
 
     } else {
         return alert("Please fill out all inputs");
