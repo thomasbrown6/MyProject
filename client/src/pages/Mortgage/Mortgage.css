@@ -1,0 +1,13 @@
+* {
+    /* display: flex; */
+    /* flex-direction: 'column'; */
+    /* justifyContent: 'center';
+    alignItems: 'center'; */
+    /* align-content: center; */
+    /* background-color: blue; */
+}
+.mc {
+    background-color: rgb(128, 205, 250);
+    border-radius: 10px;
+    box-shadow: 8px 10px #888888;
+}
