@@ -64,7 +64,7 @@ class Bills extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
 
-    if (this.state.item && this.state.category && this.state.amount && this.state.date) {
+    if (this.state.item && this.state.category && this.state.amount) {
       API.saveBill({
         payee: this.state.item,
         category: this.state.category,
@@ -84,7 +84,7 @@ class Bills extends Component {
     return (
       <Wrapper>
         <Row>
-          <Col size="5">
+          <Col size="4">
             <form>
               <label className="spending-label">Log your upcoming bills:</label>
               <Input
@@ -126,7 +126,7 @@ class Bills extends Component {
               </FormBtn>
             </form>
           </Col>
-          <Col size="7">
+          <Col size="8">
             <div className="Billapp">
               {/* <header className="Billapp-header">
                         {/* <img src={logo} className="Billapp-logo" alt="logo" /> */}

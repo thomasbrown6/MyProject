@@ -74,7 +74,7 @@ class Spending extends Component {
     return (
         <Wrapper>
             <Row>
-                <Col size="5">
+                <Col size="4">
                     <form>
                         <label className="spending-label">
                             Log your recent spending:
@@ -101,7 +101,7 @@ class Spending extends Component {
                             value={this.state.date}
                             onChange={this.handleInputChange}
                             name="date"
-                            placeholder="Select date"
+                            placeholder="Enter date ex. 01/12/2018"
                         />
                         <FormBtn
                             disabled={!(this.state.item && this.state.category && this.state.amount && this.state.date)}
@@ -111,7 +111,7 @@ class Spending extends Component {
                         </FormBtn>
                     </form>
                 </Col>
-                <Col size="1">
+                <Col size="2">
                 </Col>
                 <Col size="5">
                 <table className="table">
