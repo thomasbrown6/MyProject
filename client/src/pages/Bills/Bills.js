@@ -109,7 +109,7 @@ class Bills extends Component {
                 value={this.state.date}
                 onChange={this.handleInputChange}
                 name="date"
-                placeholder="Enter date ex. 01/12/2018"
+                placeholder="Enter due date ex. 01/12/2018"
               />
               <FormBtn
                 disabled={

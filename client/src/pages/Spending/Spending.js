@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import { TableHead, TableRow } from "../../components/Table";
+import API from "../../utils/API";
 import "./Spending.css";
 
 
@@ -10,8 +11,36 @@ class Spending extends Component {
     item: "",
     category: "",
     amount: "",
-    date: ""
+    date: "",
+    events: [
+        {
+            item: "",
+            category: "",
+            amount: "",
+            date: ""
+        }
+    ]
   };
+
+//   // When the component mounts, load all the spendings into the table
+//   componentDidMount() {
+//       this.loadSpending();
+//   }
+
+//   // Loads all the spending from the database
+//   loadSpending = () => {
+//       API.getAllSpending()
+//         .then(res => {
+//             const events = res.data.map(event => ({
+//                 item: event.item,
+//                 category: event.category,
+//                 amount: event.amount,
+//                 date: event.date
+//             }));
+//             this.setState({ events });
+//         })
+//         .catch(err => console.error(err));
+//   }
 
 
   handleInputChange = event => {
@@ -25,13 +54,19 @@ class Spending extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (!this.state.item || this.state.category || this.state.amount || this.state.date) {
+    if (this.state.item && this.state.category && this.state.amount) {
+        API.saveSpending({
+            item: this.state.item,
+            category: this.state.category,
+            amount: this.state.amount,
+            date: this.state.date
+        })      // need to load spending
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+
+    } else {
         return alert("Please fill out all inputs");
-    } 
-
-    this.setState({
-
-    });
+    }
 
   };
 
@@ -89,10 +124,10 @@ class Spending extends Component {
                     </TableHead>
                     <tbody>
                         <TableRow
-                            item={this.state.item}
-                            category={this.state.category}
-                            amount={this.state.amount}
-                            date={this.state.date}
+                            item={this.state.events.item}
+                            category={this.state.events.category}
+                            amount={this.state.events.amount}
+                            date={this.state.events.date}
                         >
                         </TableRow>
                     </tbody>
