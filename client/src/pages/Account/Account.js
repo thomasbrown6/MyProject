@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
-import { Input, FormBtn } from "../../components/Form";
-import { Card } from "../../components/Card";
+import { ProfileCard } from "../../components/Card";
+import { EditButton } from "../../components/Button";
 import API from "../../utils/API";
 import "./Account.css";
 
@@ -9,7 +9,8 @@ import "./Account.css";
 class Account extends Component {
   state = {
     incomeAmount: "",
-    goalSavings: ""
+    goalSavings: "",
+    spending: ""
   };
 
 
@@ -42,8 +43,35 @@ class Account extends Component {
     return (
         <Wrapper>
             <Row>
-                <Col size="2">
-                    <form>
+                <Col size="4">
+                    <ProfileCard
+                    title="Thomas Brown"   // this.user.name
+                    body2="Email: Thomas.brown1125@gmail.com"
+                    />
+
+                    <ProfileCard
+                        body1="Spending"
+                        body2={this.state.spending}
+                    >
+                    </ProfileCard>
+                    <ProfileCard
+                        body1="Income"
+                        body2={this.state.incomeAmount}
+                    >
+                        <EditButton>
+                            Edit
+                        </EditButton>
+                    </ProfileCard>
+                    <ProfileCard
+                        body1="Goal to Save"
+                        body2={this.state.goalSavings}
+                    >
+                        <EditButton>
+                            Edit
+                        </EditButton>
+                    </ProfileCard>
+                    
+                    {/* <form>
                         <label className="account-label">
                             What's your monthly income?
                         </label>
@@ -55,10 +83,10 @@ class Account extends Component {
                         />
                         
                         
-                    </form>
+                    </form> */}
                 </Col>
-                <Col size="2">
-                    <form>
+                <Col size="1">
+                    {/* <form>
                         <label className="account-label">
                             What's your goal for savings this month?
                         </label>
@@ -74,21 +102,13 @@ class Account extends Component {
                     >
                         Submit 
                     </FormBtn>
-                    </form>
+                    </form> */}
                 </Col>
-                <Col size="5">
+                <Col size="4">
                 
                 </Col>
 
                 <Col size="3">
-                    <Card
-                        title="Account Details"
-                        body1="Name:"
-                        body2="Email:"
-                        body3="Reset Password:"
-                        body4={"Savings: " + this.state.goalSavings}
-                        body5={"Income: " + this.state.incomeAmount}
-                    />    
             
                 </Col>
             </Row>

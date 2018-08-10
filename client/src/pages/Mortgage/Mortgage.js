@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import MortgageCalculator from "mortgage-calculator-react";
-// import customStyle from "./Mortgage.css";
+ import "./Mortgage.css";
 import { Col, Row, Wrapper } from "../../components/Grid";
 
 class Mortgage extends Component {

@@ -2,10 +2,11 @@
   "name": "mern",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3000/",
+  "proxy": "http://localhost:3001/",
   "dependencies": {
     "axios": "^0.16.2",
     "chartkick": "^3.0.0",
+    "dateformat": "^3.0.3",
     "moment": "^2.22.2",
     "react": "^16.0.0",
     "react-big-calendar": "^0.19.2",

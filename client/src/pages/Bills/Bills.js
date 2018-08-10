@@ -86,7 +86,7 @@ class Bills extends Component {
         <Row>
           <Col size="4">
             <form>
-              <label className="spending-label">Log your upcoming bills:</label>
+              <label className="spending-label">Upcoming Bills:</label>
               <Input
                 value={this.state.item}
                 onChange={this.handleInputChange}

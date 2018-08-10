@@ -5,6 +5,14 @@ import { TableHead, TableRow } from "../../components/Table";
 import API from "../../utils/API";
 import "./Spending.css";
 
+// const dateFormat = require('dateformat');
+
+// const dateFormatter = date => {
+//     dateFormat(date, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+// }
+
+
+
 
 class Spending extends Component {
   state = {
@@ -12,35 +20,22 @@ class Spending extends Component {
     category: "",
     amount: "",
     date: "",
-    events: [
-        {
-            item: "",
-            category: "",
-            amount: "",
-            date: ""
-        }
-    ]
+    spendings: []
   };
 
-//   // When the component mounts, load all the spendings into the table
-//   componentDidMount() {
-//       this.loadSpending();
-//   }
+  // When the component mounts, load all the spendings into the table
+  componentDidMount() {
+      this.loadSpendings();
+  }
 
-//   // Loads all the spending from the database
-//   loadSpending = () => {
-//       API.getAllSpending()
-//         .then(res => {
-//             const events = res.data.map(event => ({
-//                 item: event.item,
-//                 category: event.category,
-//                 amount: event.amount,
-//                 date: event.date
-//             }));
-//             this.setState({ events });
-//         })
-//         .catch(err => console.error(err));
-//   }
+  // Loads all the spending from the database
+  loadSpendings = () => {
+    API.getAllSpending()
+      .then(res =>
+        this.setState({ spendings: res.data, item: "", category: "", amount: "", date: "" })
+      )
+      .catch(err => console.log(err));
+  };
 
 
   handleInputChange = event => {
@@ -62,7 +57,7 @@ class Spending extends Component {
             amount: this.state.amount,
             date: this.state.date
         })      // need to load spending
-            .then(res => console.log(res))
+            .then(res => this.loadSpending())
             .catch(err => console.log("Front end error" + err));
 
     } else {
@@ -70,6 +65,7 @@ class Spending extends Component {
     }
 
   };
+  
 
   render() {
     return (
@@ -78,7 +74,7 @@ class Spending extends Component {
                 <Col size="4">
                     <form>
                         <label className="spending-label">
-                            Log your recent spending:
+                            Recent Spending:
                         </label>
                         <Input
                             value={this.state.item}
@@ -112,9 +108,9 @@ class Spending extends Component {
                         </FormBtn>
                     </form>
                 </Col>
-                <Col size="2">
+                <Col size="1">
                 </Col>
-                <Col size="5">
+                <Col size="7">
                 <table className="table">
                     <TableHead
                         col1="Item"
@@ -124,17 +120,18 @@ class Spending extends Component {
                     >
                     </TableHead>
                     <tbody>
+                        {this.state.spendings.map(spend => (
                         <TableRow
-                            item={this.state.events.item}
-                            category={this.state.events.category}
-                            amount={this.state.events.amount}
-                            date={this.state.events.date}
-                        >
+                            key={spend._id}
+                            item={spend.item}
+                            category={spend.category}
+                            amount={spend.amount}
+                            date={spend.date}
+                            >
                         </TableRow>
+                        ))}   
                     </tbody>
                 </table>
-                </Col>
-                <Col size="1">
                 </Col>
             </Row>
         </Wrapper>
