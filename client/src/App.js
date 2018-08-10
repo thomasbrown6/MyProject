@@ -8,6 +8,7 @@ import Spending from "./pages/Spending";
 import Bills from "./pages/Bills";
 import Organizer from "./pages/Organizer";
 import Account from "./pages/Account";
+import Signup from "./pages/Signup";
 import "./App.css";
 
 
@@ -19,7 +20,7 @@ const App = () => (
       <Container>
         <Nav />
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Signup} />
           <Route exact path="/Home" component={Home} />
           <Route exact path="/spending" component={Spending} />
           <Route exact path="/bills" component={Bills} />
