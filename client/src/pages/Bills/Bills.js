@@ -64,7 +64,7 @@ class Bills extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
 
-    if (this.state.item && this.state.category && this.state.amount && this.state.date) {
+    if (this.state.item && this.state.category && this.state.amount) {
       API.saveBill({
         payee: this.state.item,
         category: this.state.category,
@@ -84,9 +84,9 @@ class Bills extends Component {
     return (
       <Wrapper>
         <Row>
-          <Col size="5">
+          <Col size="4">
             <form>
-              <label className="spending-label">Log your upcoming bills:</label>
+              <label className="spending-label">Upcoming Bills:</label>
               <Input
                 value={this.state.item}
                 onChange={this.handleInputChange}
@@ -109,15 +109,14 @@ class Bills extends Component {
                 value={this.state.date}
                 onChange={this.handleInputChange}
                 name="date"
-                placeholder="Enter date ex. 01/12/2018"
+                placeholder="Enter due date ex. 01/12/2018"
               />
               <FormBtn
                 disabled={
                   !(
                     this.state.item &&
                     this.state.category &&
-                    this.state.amount &&
-                    this.state.date
+                    this.state.amount
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -126,7 +125,7 @@ class Bills extends Component {
               </FormBtn>
             </form>
           </Col>
-          <Col size="7">
+          <Col size="8">
             <div className="Billapp">
               {/* <header className="Billapp-header">
                         {/* <img src={logo} className="Billapp-logo" alt="logo" /> */}

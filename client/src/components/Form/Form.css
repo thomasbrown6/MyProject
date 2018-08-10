@@ -1,0 +1,13 @@
+input.form-control {
+    opacity: 0.9;
+    background-color: white !important;
+    color: black;
+}
+
+.spending-label {
+    color: cornflowerblue;
+}
+
+button {
+    background-color: cornflowerblue;
+}

@@ -2,7 +2,16 @@ import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import { TableHead, TableRow } from "../../components/Table";
+import API from "../../utils/API";
 import "./Spending.css";
+
+// const dateFormat = require('dateformat');
+
+// const dateFormatter = date => {
+//     dateFormat(date, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+// }
+
+
 
 
 class Spending extends Component {
@@ -10,7 +19,22 @@ class Spending extends Component {
     item: "",
     category: "",
     amount: "",
-    date: ""
+    date: "",
+    spendings: []
+  };
+
+  // When the component mounts, load all the spendings into the table
+  componentDidMount() {
+      this.loadSpendings();
+  }
+
+  // Loads all the spending from the database
+  loadSpendings = () => {
+    API.getAllSpending()
+      .then(res =>
+        this.setState({ spendings: res.data, item: "", category: "", amount: "", date: "" })
+      )
+      .catch(err => console.log(err));
   };
 
 
@@ -24,25 +48,33 @@ class Spending extends Component {
 
 
   handleFormSubmit = event => {
+      
     event.preventDefault();
-    if (!this.state.item || this.state.category || this.state.amount || this.state.date) {
+    if (this.state.item && this.state.category && this.state.amount) {
+        API.saveSpending({
+            item: this.state.item,
+            category: this.state.category,
+            amount: this.state.amount,
+            date: this.state.date
+        })      // need to load spending
+            .then(res => this.loadSpending())
+            .catch(err => console.log("Front end error" + err));
+
+    } else {
         return alert("Please fill out all inputs");
-    } 
-
-    this.setState({
-
-    });
+    }
 
   };
+  
 
   render() {
     return (
         <Wrapper>
             <Row>
-                <Col size="5">
+                <Col size="4">
                     <form>
                         <label className="spending-label">
-                            Log your recent spending:
+                            Recent Spending:
                         </label>
                         <Input
                             value={this.state.item}
@@ -66,7 +98,7 @@ class Spending extends Component {
                             value={this.state.date}
                             onChange={this.handleInputChange}
                             name="date"
-                            placeholder="Select date"
+                            placeholder="Enter date ex. 01/12/2018"
                         />
                         <FormBtn
                             disabled={!(this.state.item && this.state.category && this.state.amount && this.state.date)}
@@ -78,7 +110,7 @@ class Spending extends Component {
                 </Col>
                 <Col size="1">
                 </Col>
-                <Col size="5">
+                <Col size="7">
                 <table className="table">
                     <TableHead
                         col1="Item"
@@ -88,17 +120,18 @@ class Spending extends Component {
                     >
                     </TableHead>
                     <tbody>
+                        {this.state.spendings.map(spend => (
                         <TableRow
-                            item={this.state.item}
-                            category={this.state.category}
-                            amount={this.state.amount}
-                            date={this.state.date}
-                        >
+                            key={spend._id}
+                            item={spend.item}
+                            category={spend.category}
+                            amount={spend.amount}
+                            date={spend.date}
+                            >
                         </TableRow>
+                        ))}   
                     </tbody>
                 </table>
-                </Col>
-                <Col size="1">
                 </Col>
             </Row>
         </Wrapper>

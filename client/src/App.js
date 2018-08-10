@@ -7,16 +7,12 @@ import Mortgage from "./pages/Mortgage";
 import Spending from "./pages/Spending";
 import Bills from "./pages/Bills";
 import Organizer from "./pages/Organizer";
+import Account from "./pages/Account";
 import "./App.css";
 
 
 
-// *********
-// import Billapp from "./pages/Bills";
-// import Calendar from "react-big-calendar";
-// import moment from "moment";
-// import "react-big-calendar/lib/css/react-big-calendar.css";
-// ****************
+
 const App = () => (
   <Router>
     <div> 
@@ -24,9 +20,11 @@ const App = () => (
         <Nav />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/Home" component={Home} />
           <Route exact path="/spending" component={Spending} />
           <Route exact path="/bills" component={Bills} />
           <Route exact path="/organizer" component={Organizer} />
+          <Route exact path="/account" component={Account} />
           <Route exact path="/mortgage" component={Mortgage} />
           {/* <Route component={NoMatch} /> */}
         </Switch>

@@ -27,3 +27,21 @@
     to { transform: rotate(360deg); }
   }
   
+  /* Calender */
+  .rbc-calendar {
+    width: 90%;
+    background: white;
+    opacity: 0.9;
+  }
+
+  .rbc-today {
+    background: cornflowerblue;
+  }
+
+  .rbc-event {
+    background: black;
+  }
+
+  .rbc-event.rbc-selected {
+    background: gray;
+  }

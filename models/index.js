@@ -1,3 +1,4 @@
 module.exports = {
-    Bill: require("./bill")
+    Bill: require("./bill"),
+    Spending: require("./spending")
   };
