@@ -6,3 +6,10 @@
 .table {
     background: white;
 }
+
+.spendingList {
+    font-size: 26px;
+    text-align: center;
+    padding: 14px;
+    padding-bottom: 5px;
+}

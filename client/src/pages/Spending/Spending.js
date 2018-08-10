@@ -4,6 +4,10 @@ import { Input, FormBtn } from "../../components/Form";
 import { TableHead, TableRow } from "../../components/Table";
 import API from "../../utils/API";
 import "./Spending.css";
+import { List, ListItem } from "../../components/List";
+import DeleteBtn from "../../components/DeleteBtn";
+import moment from "moment"
+// import moment from "moment";
 
 // const dateFormat = require('dateformat');
 
@@ -11,6 +15,7 @@ import "./Spending.css";
 //     dateFormat(date, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 // }
 
+// const fomatted_date = moment(res.data.date).format('DD-MM-YYYY');        
 
 
 
@@ -23,6 +28,8 @@ class Spending extends Component {
     spendings: []
   };
 
+  
+
   // When the component mounts, load all the spendings into the table
   componentDidMount() {
       this.loadSpendings();
@@ -31,9 +38,9 @@ class Spending extends Component {
   // Loads all the spending from the database
   loadSpendings = () => {
     API.getAllSpending()
-      .then(res =>
+      .then(res => {
         this.setState({ spendings: res.data, item: "", category: "", amount: "", date: "" })
-      )
+      })
       .catch(err => console.log(err));
   };
 
@@ -57,7 +64,7 @@ class Spending extends Component {
             amount: this.state.amount,
             date: this.state.date
         })      // need to load spending
-            .then(res => this.loadSpending())
+            .then(res => this.loadSpendings())
             .catch(err => console.log("Front end error" + err));
 
     } else {
@@ -101,7 +108,7 @@ class Spending extends Component {
                             placeholder="Enter date ex. 01/12/2018"
                         />
                         <FormBtn
-                            disabled={!(this.state.item && this.state.category && this.state.amount && this.state.date)}
+                            disabled={!(this.state.item && this.state.category && this.state.amount)}
                             onClick={this.handleFormSubmit}
                         >
                             Submit 
@@ -111,27 +118,27 @@ class Spending extends Component {
                 <Col size="1">
                 </Col>
                 <Col size="7">
-                <table className="table">
-                    <TableHead
-                        col1="Item"
-                        col2="Category"
-                        col3="Amount"
-                        col4="Date"
-                    >
-                    </TableHead>
-                    <tbody>
-                        {this.state.spendings.map(spend => (
-                        <TableRow
-                            key={spend._id}
-                            item={spend.item}
-                            category={spend.category}
-                            amount={spend.amount}
-                            date={spend.date}
-                            >
-                        </TableRow>
-                        ))}   
-                    </tbody>
-                </table>
+                <div className="table">
+                    <h1 className="spendingList">Spending List</h1>
+                        {this.state.spendings.length ? (
+                            <List>
+                                {this.state.spendings.map(spend => (
+                                <ListItem key={spend._id}
+                                    heading={spend.item}
+                                    category={spend.category}
+                                    amount={spend.amount}
+                                    date={moment(spend.date).format("MM-DD-YY hh:mm")}
+                                    >
+                                    <DeleteBtn onClick={() => this.deleteSpendItem(spend._id)}/>
+                                </ListItem>
+            
+                        ))}
+                        </List>
+                        ) : (
+                            <h3>Add something to spending list</h3>
+                        )}
+ 
+                </div>
                 </Col>
             </Row>
         </Wrapper>
