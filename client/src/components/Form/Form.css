@@ -11,3 +11,7 @@ input.form-control {
 button {
     background-color: cornflowerblue;
 }
+
+.custom-select {
+    opacity: 0.9;
+}
