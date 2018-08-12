@@ -48,7 +48,6 @@ class Spending extends Component {
     });
   };
 
-
   // Handle change for the date in the date picker
   handleChange = date => {
     this.setState({
@@ -56,6 +55,15 @@ class Spending extends Component {
       
     })
   };
+
+    
+    // Handle change for the category in the category dropdown
+    handleCateChange = category => {
+      this.setState({
+        category: category,
+        
+      })
+    };
 
   // Delete a spending item from the database
   deleteSpendItem = id => {
@@ -96,7 +104,7 @@ class Spending extends Component {
               <div className="form-group">
                 <select className="custom-select" id="inputGroupSelect01"
                     value={this.state.category}
-                    onChange={this.handleInputChange} 
+                    onChange={this.handleCateChange} 
                     >
                     <option name="category" value="" disabled selected>Category</option>
                     <option name="category" value="Food">Food</option>
