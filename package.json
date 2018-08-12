@@ -27,6 +27,8 @@
     "mongoose": "^5.0.17",
     "mortgage-calculator-react": "^0.1.0",
     "node": "^10.8.0",
-    "react-big-calendar": "^0.19.2"
+    "react-big-calendar": "^0.19.2",
+    "react-bootstrap-date-picker": "^5.1.0",
+    "react-datepicker": "^1.6.0"
   }
 }

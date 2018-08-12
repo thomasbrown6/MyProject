@@ -47,7 +47,6 @@ export default {
   },
   // Saves a spending to the database
   saveSpending: function(spendingData) {
-    console.log("Hitting API.js")
     console.log(spendingData)
     return axios.post("/api/spending", spendingData);
   },

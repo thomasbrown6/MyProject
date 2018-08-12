@@ -20,7 +20,7 @@ class Home extends Component {
                 <Col size="12">
                     <Jumbotron>
                     <h1>GET IT TOGETHER</h1>
-                    <h4>Personal Financial Website</h4>
+                    <h4>Personal Finance Website</h4>
                     </Jumbotron>
                 </Col>
             </Row>
