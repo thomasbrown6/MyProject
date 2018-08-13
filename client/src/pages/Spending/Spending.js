@@ -59,6 +59,7 @@ class Spending extends Component {
     
     // Handle change for the category in the category dropdown
     handleCateChange = category => {
+      console.log(category);
       this.setState({
         category: category,
         
