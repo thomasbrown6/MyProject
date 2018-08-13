@@ -3,9 +3,12 @@ import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
 import "./Spending.css";
-import { List, ListItem } from "../../components/List";
-import DeleteBtn from "../../components/DeleteBtn";
-import moment from "moment";
+import "../Bills/Bills.css";
+// import { List, ListItem } from "../../components/List";
+// import DeleteBtn from "../../components/DeleteBtn";
+// import moment from "moment";
+import Calendar from "react-big-calendar";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -16,7 +19,14 @@ class Spending extends Component {
     category: "",
     amount: "",
     date: "",
-    spendings: []
+    spendings: [],
+    events: [
+      {
+        start: new Date(),
+        end: new Date(),
+        title: ""
+      }
+    ]
   };
 
   // When the component mounts, load all the spendings into the table
@@ -28,13 +38,20 @@ class Spending extends Component {
   loadSpendings = () => {
     API.getAllSpending()
       .then(res => {
-        this.setState({
-          spendings: res.data,
-          item: "",
-          category: "",
-          amount: "",
-          date: ""
-        });
+        const events = res.data.map(event => ({
+          title: event.item,
+          start: event.date,
+          end: event.date
+        }));
+        this.setState({ events });
+
+        // this.setState({
+        //   spendings: res.data,
+        //   item: "",
+        //   category: "",
+        //   amount: "",
+        //   date: ""
+        // });
       })
       .catch(err => console.log(err));
   };
@@ -145,31 +162,17 @@ class Spending extends Component {
               </FormBtn>
             </form>
           </Col>
-          <Col size="1" />
-          <Col size="7">
-            <div className="table">
-              <h1 className="spendingList">Spending List</h1>
-              {this.state.spendings.length ? (
-                <List>
-                  {this.state.spendings.map(spend => (
-                    <ListItem
-                      key={spend._id}
-                      heading={spend.item}
-                      category={spend.category}
-                      amount={spend.amount}
-                      date={moment(spend.date).format("MM-DD-YY")}
-                    >
-                      <DeleteBtn
-                        onClick={() => this.deleteSpendItem(spend._id)}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <h3>  </h3>
-              )}
+          <Col size="8" >
+            <div className="Billapp">
+              <Calendar
+                defaultDate={new Date()}
+                defaultView="month"
+                events={this.state.events}
+
+                style={{ height: "75vh", width: "100%", float: "right" }}
+              />
             </div>
-          </Col>
+            </Col>
         </Row>
       </Wrapper>
     );
@@ -177,3 +180,28 @@ class Spending extends Component {
 }
 
 export default Spending;
+
+
+
+// <div className="table">
+//               <h1 className="spendingList">Spending List</h1>
+//               {this.state.spendings.length ? (
+//                 <List>
+//                   {this.state.spendings.map(spend => (
+//                     <ListItem
+//                       key={spend._id}
+//                       heading={spend.item}
+//                       category={spend.category}
+//                       amount={spend.amount}
+//                       date={moment(spend.date).format("MM-DD-YY")}
+//                     >
+//                       <DeleteBtn
+//                         onClick={() => this.deleteSpendItem(spend._id)}
+//                       />
+//                     </ListItem>
+//                   ))}
+//                 </List>
+//               ) : (
+//                 <h3>  </h3>
+//               )}
+//             </div>

@@ -192,13 +192,6 @@ class Bills extends Component {
           </Col>
           <Col size="8">
             <div className="Billapp">
-              {/* <header className="Billapp-header">
-                        {/* <img src={logo} className="Billapp-logo" alt="logo" /> */}
-              {/* <h1 className="Billapp-title">Welcome to Bills</h1>
-                        </header> */}
-              {/* <p className="Billapp-intro"> */}
-              {/* To get started, edit <code>src/Billapp.js</code> and save to reload. */}
-              {/* </p> */}
               <Calendar
                 defaultDate={new Date()}
                 defaultView="month"
