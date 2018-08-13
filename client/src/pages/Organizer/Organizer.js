@@ -21,13 +21,14 @@ class Organizer extends Component {
   // When the component mounts, load all the bills into the calender
   componentDidMount() {
     this.getUpcomingBills();
+    this.getSpendingItems();
   }
 
   // Loads all the upcomingBills into the calender
   getUpcomingBills = () => {
     API.getBills()
       .then(res => {
-        console.log(res);
+        //console.log(res);
         this.setState({ upcomingBills: res.data });
       })
       .catch(err => console.error(err));
@@ -39,6 +40,29 @@ class Organizer extends Component {
       .then(res => this.getUpcomingBills())
       .catch(err => console.log(err));
   };
+
+    // Loads all the spending items into the pie chart
+    getSpendingItems = () => {
+      API.getAllSpending()
+        .then(res => {
+          console.log(res.data);
+          //this.setState({ data: res.data });
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].category === "Food") {
+              
+              
+          
+            }
+          // const spendingItems = res.data.map(spendItem => ({
+          //   title: spendItem.category,
+          //   value: spendItem.amount,
+          // }))
+          }
+          
+          // this.setState({ data: spendingItems });
+        })
+        .catch(err => console.error(err));
+    };
 
   handleFormSubmit = event => {
     event.preventDefault();

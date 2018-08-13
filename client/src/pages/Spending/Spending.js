@@ -59,8 +59,9 @@ class Spending extends Component {
     
     // Handle change for the category in the category dropdown
     handleCateChange = category => {
+      console.log(category.target.value)
       this.setState({
-        category: category,
+        category: category.target.value,
         
       })
     };
@@ -106,7 +107,7 @@ class Spending extends Component {
                     value={this.state.category}
                     onChange={this.handleCateChange} 
                     >
-                    <option name="category" value="" disabled selected>Category</option>
+                    <option name="category" value="" disabled >Category</option>
                     <option name="category" value="Food">Food</option>
                     <option name="category" value="Entertainment">Entertainment</option>
                     <option name="category" value="Car">Car</option>
