@@ -148,7 +148,7 @@ class Bills extends Component {
                     value={this.state.category}
                     onChange={this.handleDropdownChange} 
                     >
-                    <option value="" disabled selected>Category</option>
+                    <option value="" disabled>Category</option>
                     <option value="Utilities">Utilities</option>
                     <option value="Gas">Gas</option>
                     <option value="Car Payment">Car Payment</option>
@@ -170,7 +170,7 @@ class Bills extends Component {
               />
               <div className="form-group">
                 <DatePicker
-                  selected={this.state.date}
+                  selected={this.state.date ? this.state.date : null}
                   onChange={this.handleChange.bind(this)}
                   placeholderText="Date"
                 />                

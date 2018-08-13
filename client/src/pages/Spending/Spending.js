@@ -13,6 +13,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
+let allViews = Object.keys(Calendar.Views).map(k => Calendar.Views[k])
+
 class Spending extends Component {
   state = {
     item: "",
@@ -24,7 +26,8 @@ class Spending extends Component {
       {
         start: new Date(),
         end: new Date(),
-        title: ""
+        title: "",
+        amount: 0
       }
     ]
   };
@@ -41,7 +44,8 @@ class Spending extends Component {
         const events = res.data.map(event => ({
           title: event.item,
           start: event.date,
-          end: event.date
+          end: event.date,
+          amount: event.amount
         }));
         this.setState({ events });
 
@@ -90,6 +94,13 @@ class Spending extends Component {
       .catch(err => console.log(err));
   };
 
+  handleSelectEvent(event) {
+    console.log(event);
+    alert(event.title + "\n Amount: " + 
+    event.amount);
+}
+
+
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.item && this.state.category && this.state.amount && this.state.date) {
@@ -124,17 +135,17 @@ class Spending extends Component {
                     value={this.state.category}
                     onChange={this.handleCateChange} 
                     >
-                    <option name="category" value="" disabled >Category</option>
-                    <option name="category" value="Food">Food</option>
-                    <option name="category" value="Entertainment">Entertainment</option>
-                    <option name="category" value="Car">Car</option>
-                    <option name="category" value="Family">Family</option>
-                    <option name="category" value="Shopping">Shopping</option>
-                    <option name="category" value="Gifts">Gifts</option>
-                    <option name="category" value="Investment">Investment</option>
-                    <option name="category" value="Vacation">Vacation</option>
-                    <option name="category" value="Emergency">Emergency</option>
-                    <option name="category" value="Misc">Misc</option>
+                    <option value="" disabled >Category</option>
+                    <option value="Food">Food</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Car">Car</option>
+                    <option value="Family">Family</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Gifts">Gifts</option>
+                    <option value="Investment">Investment</option>
+                    <option value="Vacation">Vacation</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Misc">Misc</option>
                 </select>
               </div>
               
@@ -165,10 +176,13 @@ class Spending extends Component {
           <Col size="8" >
             <div className="Billapp">
               <Calendar
+                selectable
+                popup
+                onSelectEvent={(event) =>this.handleSelectEvent(event)}
                 defaultDate={new Date()}
                 defaultView="month"
                 events={this.state.events}
-
+                views={allViews}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
             </div>
