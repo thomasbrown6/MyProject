@@ -9,6 +9,7 @@ import "./Bills.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { app } from "../../config";
 
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
 
@@ -25,7 +26,9 @@ class Bills extends Component {
         end: new Date(),
         title: ""
       }
-    ]
+    ],
+    //added email LH
+    email:""
   };
 
   // When the component mounts, load all the bills into the calender
@@ -36,13 +39,23 @@ class Bills extends Component {
   // Loads all the bills into the calender
   loadBills = () => {
     API.getBills()
-      .then(res => {
-        const events = res.data.map(event => ({
+      .then(res => 
+      //Here I added the formula to assign each user with their bills
+      {
+        const filteredEvents=[];
+  
+        for(let i=0;i<res.data.length;i++){
+          if(res.data[i].email===this.state.email){
+            filteredEvents.push(res.data[i]);
+          }
+        }
+
+        const events = filteredEvents.map(event => ({
           title: event.payee,
           start: event.dueDate,
           end: event.dueDate
         }));
-        this.setState({ events });
+        this.setState({ events });      
       })
       .catch(err => console.error(err));
   };
@@ -79,12 +92,15 @@ class Bills extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
 
-    if (this.state.item && this.state.category && this.state.amount && this.state.date) {
+    if (this.state.item && this.state.category && this.state.amount && this.state.date && this.state.email) {
       API.saveBill({
         payee: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        dueDate: this.state.date
+        dueDate: this.state.date,
+
+        //added email to associate to current logged in user
+        email: this.state.email
       })
         .then(res => {
            this.loadBills();
@@ -102,6 +118,17 @@ class Bills extends Component {
     }
   };
 
+  //sets the user for the bill
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true, 
+          email: user.email
+        });
+      }
+    })
+  }
 
   render() {
     return (
