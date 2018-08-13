@@ -5,6 +5,6 @@ const spendRoutes = require("./spending");
 // Bill routes
 router.use("/bills", billRoutes);
 // Spending routes
-router.use("/spending", spendRoutes)
+router.use("/spending", spendRoutes);
 
 module.exports = router;

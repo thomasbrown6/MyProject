@@ -128,7 +128,7 @@ class Spending extends Component {
               />
                 <div className="form-group">
                 <DatePicker
-                  selected={this.state.date}
+                  selected={this.state.date ? this.state.date : null}
                   onChange={this.handleChange.bind(this)}
                   placeholderText="Date"
                 />                
