@@ -11,6 +11,7 @@ import Calendar from "react-big-calendar";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { app } from "../../config";
 
 
 let allViews = Object.keys(Calendar.Views).map(k => Calendar.Views[k])
@@ -29,7 +30,8 @@ class Spending extends Component {
         title: "",
         amount: 0
       }
-    ]
+    ],
+    email:""
   };
 
   // When the component mounts, load all the spendings into the table
@@ -40,24 +42,26 @@ class Spending extends Component {
   // Loads all the spending from the database
   loadSpendings = () => {
     API.getAllSpending()
-      .then(res => {
-        const events = res.data.map(event => ({
+      .then(res => 
+      //Here I added the formula to assign each user with their spending
+      {
+        const filteredSpending=[];
+  
+        for(let i=0;i<res.data.length;i++){
+          if(res.data[i].email===this.state.email){
+            filteredSpending.push(res.data[i]);
+          }
+        }
+
+        const events = filteredSpending.map(event => ({
           title: event.item,
           start: event.date,
           end: event.date,
           amount: event.amount
         }));
-        this.setState({ events });
-
-        // this.setState({
-        //   spendings: res.data,
-        //   item: "",
-        //   category: "",
-        //   amount: "",
-        //   date: ""
-        // });
+        this.setState({ events });      
       })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   };
 
   // Handle input change method
@@ -103,12 +107,13 @@ class Spending extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.item && this.state.category && this.state.amount && this.state.date) {
+    if (this.state.item && this.state.category && this.state.amount && this.state.date && this.state.email) {
       API.saveSpending({
         item: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        date: this.state.date
+        date: this.state.date,
+        email: this.state.email
       }) // need to load spending
         .then(res => this.loadSpendings())
         .catch(err => console.log("Front end error" + err));
@@ -116,6 +121,18 @@ class Spending extends Component {
       return alert("Please fill out all inputs");
     }
   };
+
+  //get the email the user used to log in
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          email: user.email
+        });
+      }
+    });
+  }
 
   render() {
     return (

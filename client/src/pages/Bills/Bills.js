@@ -42,15 +42,15 @@ class Bills extends Component {
       .then(res => 
       //Here I added the formula to assign each user with their bills
       {
-        const filteredEvents=[];
+        const filteredBills=[];
   
         for(let i=0;i<res.data.length;i++){
           if(res.data[i].email===this.state.email){
-            filteredEvents.push(res.data[i]);
+            filteredBills.push(res.data[i]);
           }
         }
 
-        const events = filteredEvents.map(event => ({
+        const events = filteredBills.map(event => ({
           title: event.payee,
           start: event.dueDate,
           end: event.dueDate
