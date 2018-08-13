@@ -148,7 +148,7 @@ class Bills extends Component {
                     value={this.state.category}
                     onChange={this.handleDropdownChange} 
                     >
-                    <option value="" disabled selected>Category</option>
+                    <option value="" disabled>Category</option>
                     <option value="Utilities">Utilities</option>
                     <option value="Gas">Gas</option>
                     <option value="Car Payment">Car Payment</option>
@@ -170,7 +170,7 @@ class Bills extends Component {
               />
               <div className="form-group">
                 <DatePicker
-                  selected={this.state.date}
+                  selected={this.state.date ? this.state.date : null}
                   onChange={this.handleChange.bind(this)}
                   placeholderText="Date"
                 />                
@@ -192,13 +192,6 @@ class Bills extends Component {
           </Col>
           <Col size="8">
             <div className="Billapp">
-              {/* <header className="Billapp-header">
-                        {/* <img src={logo} className="Billapp-logo" alt="logo" /> */}
-              {/* <h1 className="Billapp-title">Welcome to Bills</h1>
-                        </header> */}
-              {/* <p className="Billapp-intro"> */}
-              {/* To get started, edit <code>src/Billapp.js</code> and save to reload. */}
-              {/* </p> */}
               <Calendar
                 defaultDate={new Date()}
                 defaultView="month"
