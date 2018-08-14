@@ -6,6 +6,8 @@ import DeleteBtn from "../../components/DeleteBtn";
 import moment from "moment";
 import API from "../../utils/API";
 import "./Organizer.css";
+import { app } from "../../config";
+
 
 class Organizer extends Component {
   state = {
@@ -16,7 +18,8 @@ class Organizer extends Component {
       { title: "Data 4", value: 20, color: "orange" },
       { title: "Data 5", value: 10, color: "grey" }
     ],
-    upcomingBills: []
+    upcomingBills: [],
+    email: ""
   };
   // When the component mounts, load all the bills into the calender
   componentDidMount() {
@@ -28,8 +31,18 @@ class Organizer extends Component {
   getUpcomingBills = () => {
     API.getBills()
       .then(res => {
-        //console.log(res);
-        this.setState({ upcomingBills: res.data });
+        const upcoming = [];
+        console.log(res.data);
+
+        //will loop through bills for particular user and show bill due in future
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].email === this.state.email) {
+            if (moment(res.data[i].dueDate).isAfter()) {
+              upcoming.push(res.data[i]);
+            }
+          }
+        }
+        this.setState({ upcomingBills: upcoming });
       })
       .catch(err => console.error(err));
   };
@@ -47,19 +60,14 @@ class Organizer extends Component {
         .then(res => {
           console.log(res.data);
           //this.setState({ data: res.data });
-          for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].category === "Food") {
-              
-              
-          
-            }
+       
           // const spendingItems = res.data.map(spendItem => ({
           //   title: spendItem.category,
           //   value: spendItem.amount,
           // }))
-          }
           
           // this.setState({ data: spendingItems });
+          
         })
         .catch(err => console.error(err));
     };
@@ -67,6 +75,18 @@ class Organizer extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
   };
+
+  //checks which user is logged in
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          email: user.email
+        });
+      }
+    });
+  }
 
   render() {
     return (
