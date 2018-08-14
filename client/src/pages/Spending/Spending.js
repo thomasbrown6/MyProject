@@ -13,6 +13,8 @@ import Modal from 'react-modal';
 import "./Spending.css";
 import "../Bills/Bills.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { app } from "../../config";
+
 // Localizer for Calendar
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
 
@@ -57,7 +59,8 @@ class Spending extends Component {
         title: "",
         amount: 0
       }
-    ]
+    ],
+    email:""
   };
 
   // When the component mounts, load all the spendings into the table
@@ -68,8 +71,18 @@ class Spending extends Component {
   // Loads all the spending from the database
   loadSpendings = () => {
     API.getAllSpending()
-      .then(res => {
-        const events = res.data.map(event => ({
+      .then(res => 
+      //Here I added the formula to assign each user with their spending
+      {
+        const filteredSpending=[];
+  
+        for(let i=0;i<res.data.length;i++){
+          if(res.data[i].email===this.state.email){
+            filteredSpending.push(res.data[i]);
+          }
+        }
+
+        const events = filteredSpending.map(event => ({
           title: event.item,
           start: moment(event.startDate).toDate(),
           end: moment(event.startDate).toDate(),
@@ -80,7 +93,7 @@ class Spending extends Component {
         this.setState({ events });
 
       })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   };
 
   // Handle input change method
@@ -171,21 +184,37 @@ class Spending extends Component {
       this.state.category &&
       this.state.amount &&
       this.state.startDate &&
-      this.state.endDate
+      this.state.endDate &&
+      this.state.email
     ) {
+
       API.saveSpending({
         item: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
         startDate: moment(this.state.startDate).toDate(),
-        endDate: moment(this.state.endDate).toDate()
+        endDate: moment(this.state.endDate).toDate(),
+        email: this.state.email
       }) // load spending
+
         .then(res => this.loadSpendings())
         .catch(err => console.log("Front end error" + err));
     } else {
       return alert("Please fill out all inputs");
     }
   };
+
+  //get the email the user used to log in
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          email: user.email
+        });
+      }
+    });
+  }
 
   render() {
     return (
