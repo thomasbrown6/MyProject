@@ -8,16 +8,9 @@ import API from "../../utils/API";
 import "./Organizer.css";
 import { app } from "../../config";
 
-
 class Organizer extends Component {
   state = {
-    data: [
-      { title: "Data 1", value: 100, color: "red" },
-      { title: "Data 2", value: 60, color: "blue" },
-      { title: "Data 3", value: 30, color: "green" },
-      { title: "Data 4", value: 20, color: "orange" },
-      { title: "Data 5", value: 10, color: "grey" }
-    ],
+    data: [],
     upcomingBills: [],
     email: ""
   };
@@ -54,23 +47,52 @@ class Organizer extends Component {
       .catch(err => console.log(err));
   };
 
-    // Loads all the spending items into the pie chart
-    getSpendingItems = () => {
-      API.getAllSpending()
-        .then(res => {
-          console.log(res.data);
-          //this.setState({ data: res.data });
-       
-          // const spendingItems = res.data.map(spendItem => ({
-          //   title: spendItem.category,
-          //   value: spendItem.amount,
-          // }))
-          
-          // this.setState({ data: spendingItems });
-          
-        })
-        .catch(err => console.error(err));
-    };
+  // Loads all the spending items into the pie chart
+  getSpendingItems = () => {
+    API.getAllSpending()
+      .then(res => {        
+        const color = ["red","blue","green","orange","grey","purple","yellow","pink","grey","magenta","brown"];
+        const categoryObjects = [];
+        let values = {
+          Car: 0,
+          Emergency: 0,
+          Family: 0,
+          Food: 0,
+          Gifts: 0,
+          Investment: 0,
+          Misc: 0,
+          Shopping: 0,
+          Vacation: 0,
+          Work: 0,
+          Entertainment: 0
+        };
+        let counter = 0;
+
+        //this loop adds the dollar amount spend to the respective categories
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].email === this.state.email) {
+            if (res.data[i].category in values) {
+              values[res.data[i].category] += res.data[i].amount;
+            }
+          }
+        }
+
+        //for every key value pair in values array create an object for the data state
+        for (var val in values) {
+          let obj = {};
+          obj["title"] = val.toString() + ": $" + values[val];
+          obj["value"] = values[val];
+          obj["color"] = color[counter];
+          console.log(obj);
+          categoryObjects.push(obj);
+          counter++;
+        }
+
+        //assign categoryObjects to the data state
+        this.setState({ data: categoryObjects });
+      })
+      .catch(err => console.error(err));
+  };
 
   handleFormSubmit = event => {
     event.preventDefault();
