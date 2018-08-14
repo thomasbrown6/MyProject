@@ -34,3 +34,29 @@
     height: 38px;
     border: gray;
 }
+
+/* Modal Styles */
+.modal-heading {
+    color: black;
+    text-align: center;
+    font-size: 50px;
+}
+
+.modal-details {
+    text-align: center;
+    font-size: 20px;
+}
+
+.modal-close {
+    float: left;
+    background: #3174ad;
+    border-radius: 4px;
+}
+
+.delete-btn {
+    float: right;
+    color: white;
+    background: #3174ad;
+    border-radius: 4px;
+}
+/* ============ */
