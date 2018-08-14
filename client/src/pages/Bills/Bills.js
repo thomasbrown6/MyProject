@@ -13,13 +13,13 @@ import { app } from "../../config";
 
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
 
-
 class Bills extends Component {
   state = {
     item: "",
     category: "",
     amount: "",
-    date: "",
+    startDate: null,
+    endDate: null,
     events: [
       {
         start: new Date(),
@@ -28,7 +28,7 @@ class Bills extends Component {
       }
     ],
     //added email LH
-    email:""
+    email: ""
   };
 
   // When the component mounts, load all the bills into the calender
@@ -39,24 +39,26 @@ class Bills extends Component {
   // Loads all the bills into the calender
   loadBills = () => {
     API.getBills()
-      .then(res => 
-      //Here I added the formula to assign each user with their bills
-      {
-        const filteredBills=[];
-  
-        for(let i=0;i<res.data.length;i++){
-          if(res.data[i].email===this.state.email){
-            filteredBills.push(res.data[i]);
-          }
-        }
+      .then(res =>
+        //Here I added the formula to assign each user with their bills
+        {
+          const filteredEvents = [];
 
-        const events = filteredBills.map(event => ({
-          title: event.payee,
-          start: event.dueDate,
-          end: event.dueDate
-        }));
-        this.setState({ events });      
-      })
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].email === this.state.email) {
+              filteredEvents.push(res.data[i]);
+            }
+          }
+
+          const events = filteredEvents.map(event => ({
+            title: event.payee,
+            start: moment(event.dueDate).toDate(),
+            end: moment(event.dueDate).toDate(),
+            amount: event.amount
+          }));
+          this.setState({ events });
+        }
+      )
       .catch(err => console.error(err));
   };
 
@@ -67,12 +69,24 @@ class Bills extends Component {
       .catch(err => console.log(err));
   };
 
-  handleChange = date => {
+  // Handle change for the date in the date picker
+  handleChangeStart = startDate => {
     this.setState({
-      date: date,
-      
-    })
+      startDate: startDate
+    });
   };
+
+  // Handle change for the date in the date picker
+  handleChangeEnd = endDate => {
+    this.setState({
+      endDate: endDate
+    });
+  };
+
+  // Shows alert of bill details
+  handleSelectEvent(event) {
+    alert(event.title + "\n Amount: " + event.amount);
+  }
 
   // Sets the state as the user types the input
   handleInputChange = event => {
@@ -87,32 +101,37 @@ class Bills extends Component {
     this.setState({ category: event.target.value });
   };
 
-
   // Run this function for creating a new bill
   handleFormSubmit = event => {
     event.preventDefault();
 
-    if (this.state.item && this.state.category && this.state.amount && this.state.date && this.state.email) {
+    if (
+      this.state.item &&
+      this.state.category &&
+      this.state.amount &&
+      this.state.startDate &&
+      this.state.endDate &&
+      this.state.email
+    ) {
       API.saveBill({
         payee: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        dueDate: this.state.date,
+        dueDate: moment(this.state.startDate).toDate(),
 
         //added email to associate to current logged in user
         email: this.state.email
       })
         .then(res => {
-           this.loadBills();
-           this.setState({
-             item: "",
-             category: "",
-             amount: "",
-             date: ""
-           })
+          this.loadBills();
+          this.setState({
+            item: "",
+            category: "",
+            amount: "",
+            date: ""
+          });
         })
         .catch(err => console.log(err));
-
     } else {
       return alert("Please fill out all inputs");
     }
@@ -123,11 +142,11 @@ class Bills extends Component {
     app.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
-          authenticated: true, 
+          authenticated: true,
           email: user.email
         });
       }
-    })
+    });
   }
 
   render() {
@@ -144,22 +163,27 @@ class Bills extends Component {
                 placeholder="Bill name"
               />
               <div className="form-group">
-                <select className="custom-select" id="inputGroupSelect02"
-                    value={this.state.category}
-                    onChange={this.handleDropdownChange} 
-                    >
-                    <option value="" disabled>Category</option>
-                    <option value="Utilities">Utilities</option>
-                    <option value="Gas">Gas</option>
-                    <option value="Car Payment">Car Payment</option>
-                    <option value="Phone">Phone</option>
-                    <option value="Insurance">Insurance</option>
-                    <option value="Rent">Rent</option>
-                    <option value="Hospital">Hospital</option>
-                    <option value="Daycare">Daycare</option>
-                    <option value="Health & Fitness">Health & Fitness</option>
-                    <option value="Personal Care">Personal Care</option>
-                    <option value="Misc">Misc</option>
+                <select
+                  className="custom-select"
+                  id="inputGroupSelect02"
+                  value={this.state.category}
+                  onChange={this.handleDropdownChange}
+                >
+                  <option value="" disabled>
+                    Category
+                  </option>
+                  <option value="Car Payment">Car Payment</option>
+                  <option value="Childcare">Childcare</option>
+                  <option value="Gas">Gas</option>
+                  <option value="Health & Fitness">Health & Fitness</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Misc">Misc</option>
+                  <option value="Personal Care">Personal Care</option>
+                  <option value="Phone">Phone</option>
+                  <option value="Rent">Rent</option>
+                  <option value="Utilities">Utilities</option>
+                  
                 </select>
               </div>
               <Input
@@ -170,18 +194,42 @@ class Bills extends Component {
               />
               <div className="form-group">
                 <DatePicker
-                  selected={this.state.date ? this.state.date : null}
-                  onChange={this.handleChange.bind(this)}
+                  className="datePickerStartDate"
+                  selected={this.state.startDate ? this.state.startDate : null}
+                  onChange={this.handleChangeStart.bind(this)}
+                  selectsStart
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
                   placeholderText="Date"
-                />                
-                </div>
+                  showTimeSelect
+                  timeFormat="hh:mm:a"
+                  timeIntervals={15}
+                  dateFormat="LLL"
+                  timeCaption="time"
+                />
+                <DatePicker
+                  className="datePickerEndDate"
+                  selected={this.state.endDate ? this.state.endDate : null}
+                  onChange={this.handleChangeEnd.bind(this)}
+                  selectsEnd
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                  placeholderText="Date"
+                  showTimeSelect
+                  timeFormat="hh:mm:a"
+                  timeIntervals={15}
+                  dateFormat="LLL"
+                  timeCaption="time"
+                />
+              </div>
               <FormBtn
                 disabled={
                   !(
                     this.state.item &&
                     this.state.category &&
                     this.state.amount &&
-                    this.state.date
+                    this.state.startDate &&
+                    this.state.endDate
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -193,10 +241,14 @@ class Bills extends Component {
           <Col size="8">
             <div className="Billapp">
               <Calendar
+                selectable
+                popup
+                onSelectEvent={event => this.handleSelectEvent(event)}
                 defaultDate={new Date()}
                 defaultView="month"
                 events={this.state.events}
-
+                showMultiDayTimes
+                step={60}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
             </div>
