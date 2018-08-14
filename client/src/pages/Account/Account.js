@@ -4,13 +4,15 @@ import { ProfileCard } from "../../components/Card";
 import { EditButton } from "../../components/Button";
 import API from "../../utils/API";
 import "./Account.css";
+import { app } from "../../config";
 
 
 class Account extends Component {
   state = {
     incomeAmount: "",
     goalSavings: "",
-    spending: ""
+    spending: "",
+    email:""
   };
 
 
@@ -39,14 +41,25 @@ class Account extends Component {
 
   };
 
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          email: user.email
+        });
+      }
+    });
+  }
+
   render() {
     return (
         <Wrapper>
             <Row>
                 <Col size="4">
                     <ProfileCard
-                    title="Thomas Brown"   // this.user.name
-                    body2="Email: Thomas.brown1125@gmail.com"
+                    title="Account Email"   // this.user.name
+                    body2={this.state.email}
                     />
 
                     <ProfileCard
