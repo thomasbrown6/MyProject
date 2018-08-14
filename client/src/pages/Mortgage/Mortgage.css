@@ -12,3 +12,12 @@
     box-shadow: 8px 10px #888888;
     opacity: 0.9;
 }
+.qlrates {
+    color:white;
+}
+.findHome {
+    color:white;
+}
+.findHome:hover {
+    color: black;
+}
