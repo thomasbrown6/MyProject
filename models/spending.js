@@ -5,8 +5,7 @@ const spendingSchema = new Schema({
   item: { type: String, required: true },
   category: { type: String, required: true },
   amount: { type: Number, required: true },
-  startDate: { type: Date, default: Date.now },
-  endDate: { type: Date, default: Date.now },
+  date: { type: Date, default: Date.now },
   //added email to associate user to their spending
   email: {type: String,required: true}
                                  

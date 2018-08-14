@@ -1,4 +1,6 @@
-.delete-btn {
-    border-radius: 4px;
+.delete-btn2 {
     float: right;
+    color: white;
+    background: #3174ad;
+    border-radius: 3px;
 }

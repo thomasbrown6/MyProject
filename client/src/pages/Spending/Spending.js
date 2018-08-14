@@ -39,8 +39,7 @@ class Spending extends Component {
     item: "",
     category: "",
     amount: "",
-    startDate: null,
-    endDate: null,
+    date: null,
     spendings: [],
     modalIsOpen: false,
     modalItem: {
@@ -83,8 +82,8 @@ class Spending extends Component {
 
         const events = filteredSpending.map(event => ({
           title: event.item,
-          start: moment(event.startDate).toDate(),
-          end: moment(event.startDate).toDate(),
+          start: moment(event.date).toDate(),
+          end: moment(event.date).toDate(),
           amount: event.amount,
           id: event._id,
           category: event.category
@@ -105,18 +104,11 @@ class Spending extends Component {
   };
 
   // Handle change for the date in the date picker
-  handleChangeStart = startDate => {
+  handleChangeDate = date => {
     this.setState({
-      startDate: startDate
+      date: date
     });
   };
-
-    // Handle change for the date in the date picker
-    handleChangeEnd = endDate => {
-      this.setState({
-        endDate: endDate
-      });
-    };
 
   // Handle change for the category in the category dropdown
   handleCategoryChange = category => {
@@ -182,8 +174,7 @@ class Spending extends Component {
       this.state.item &&
       this.state.category &&
       this.state.amount &&
-      this.state.startDate &&
-      this.state.endDate &&
+      this.state.date &&
       this.state.email
     ) {
 
@@ -191,8 +182,7 @@ class Spending extends Component {
         item: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        startDate: moment(this.state.startDate).toDate(),
-        endDate: moment(this.state.endDate).toDate(),
+        date: moment(this.state.date).toDate(),
         email: this.state.email
       }) // load spending
 
@@ -261,25 +251,11 @@ class Spending extends Component {
               <div className="form-group">
                 <DatePicker
                   className="datePickerStartDate"
-                  selected={this.state.startDate ? this.state.startDate : null}
-                  onChange={this.handleChangeStart.bind(this)}
+                  selected={this.state.date ? this.state.date : null}
+                  onChange={this.handleChangeDate.bind(this)}
                   selectsStart
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
-                  placeholderText="Date"
-                  showTimeSelect
-                  timeFormat="hh:mm:a"
-                  timeIntervals={15}
-                  dateFormat="LLL"
-                  timeCaption="time"
-                />
-                <DatePicker
-                  className="datePickerEndDate"
-                  selected={this.state.endDate ? this.state.endDate : null}
-                  onChange={this.handleChangeEnd.bind(this)}
-                  selectsEnd
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
+                  startDate={this.state.date}
+                  endDate={this.state.date}
                   placeholderText="Date"
                   showTimeSelect
                   timeFormat="hh:mm:a"
@@ -295,8 +271,7 @@ class Spending extends Component {
                     this.state.item &&
                     this.state.category &&
                     this.state.amount &&
-                    this.state.startDate &&
-                    this.state.endDate
+                    this.state.date
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -339,10 +314,10 @@ class Spending extends Component {
                     <input className="form-control" placeholder="item" />                     
                   ) : null}
                     <button onClick={this.showInput}>Edit</button> */}
+                    <button className="modal-close" onClick={this.closeModal}>close</button>
                     <button className="delete-btn" onClick={this.deleteSpendItem}>
                     delete
                     </button>
-                    <button className="modal-close" onClick={this.closeModal}>close</button>
                   </form>
                   </div>
                 </Modal>
