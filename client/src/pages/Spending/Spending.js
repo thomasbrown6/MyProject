@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
+import { app } from "../../config";
 // NPMs =========================================
 import moment from "moment";
 import Calendar from "react-big-calendar";
@@ -12,7 +13,6 @@ import Modal from 'react-modal';
 import "./Spending.css";
 import "../Bills/Bills.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { app } from "../../config";
 
 // Localizer for Calendar
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
@@ -39,9 +39,7 @@ class Spending extends Component {
     item: "",
     category: "",
     amount: "",
-    startDate: null,
-    endDate: null,
-    spendings: [],
+    date: null,
     modalIsOpen: false,
     modalItem: {
       id: 0,
@@ -83,8 +81,8 @@ class Spending extends Component {
 
         const events = filteredSpending.map(event => ({
           title: event.item,
-          start: moment(event.startDate).toDate(),
-          end: moment(event.startDate).toDate(),
+          start: moment(event.date).toDate(),
+          end: moment(event.date).toDate(),
           amount: event.amount,
           id: event._id,
           category: event.category
@@ -105,31 +103,16 @@ class Spending extends Component {
   };
 
   // Handle change for the date in the date picker
-  handleChangeStart = startDate => {
+  handleChangeDate = date => {
     this.setState({
-      startDate: startDate
+      date: date
     });
   };
-
-    // Handle change for the date in the date picker
-    handleChangeEnd = endDate => {
-      this.setState({
-        endDate: endDate
-      });
-    };
 
   // Handle change for the category in the category dropdown
   handleCategoryChange = category => {
-    console.log(category.target.value);
-    this.setState({
-      category: category.target.value
-    });
+    this.setState({ category: category.target.value });
   };
-
-  // Shows alert of spending item details
-  handleSelectEvent(event) {
-    alert(event.title + "\n Amount: " + event.amount);
-  }
 
   //============Methods for modal ================//
   openModal = (item) => {
@@ -182,8 +165,7 @@ class Spending extends Component {
       this.state.item &&
       this.state.category &&
       this.state.amount &&
-      this.state.startDate &&
-      this.state.endDate &&
+      this.state.date &&
       this.state.email
     ) {
 
@@ -191,12 +173,19 @@ class Spending extends Component {
         item: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        startDate: moment(this.state.startDate).toDate(),
-        endDate: moment(this.state.endDate).toDate(),
+        date: moment(this.state.date).toDate(),
+        //added email to associate to current logged in user
         email: this.state.email
-      }) // load spending
-
-        .then(res => this.loadSpendings())
+      })
+        .then(res => {
+          this.loadSpendings();
+          this.setState({
+            item: "",
+            category: "",
+            amount: "",
+            date: ""
+          });
+        })
         .catch(err => console.log("Front end error" + err));
     } else {
       return alert("Please fill out all inputs");
@@ -261,25 +250,11 @@ class Spending extends Component {
               <div className="form-group">
                 <DatePicker
                   className="datePickerStartDate"
-                  selected={this.state.startDate ? this.state.startDate : null}
-                  onChange={this.handleChangeStart.bind(this)}
+                  selected={this.state.date ? this.state.date : null}
+                  onChange={this.handleChangeDate.bind(this)}
                   selectsStart
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
-                  placeholderText="Date"
-                  showTimeSelect
-                  timeFormat="hh:mm:a"
-                  timeIntervals={15}
-                  dateFormat="LLL"
-                  timeCaption="time"
-                />
-                <DatePicker
-                  className="datePickerEndDate"
-                  selected={this.state.endDate ? this.state.endDate : null}
-                  onChange={this.handleChangeEnd.bind(this)}
-                  selectsEnd
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
+                  startDate={this.state.date}
+                  endDate={this.state.date}
                   placeholderText="Date"
                   showTimeSelect
                   timeFormat="hh:mm:a"
@@ -295,8 +270,7 @@ class Spending extends Component {
                     this.state.item &&
                     this.state.category &&
                     this.state.amount &&
-                    this.state.startDate &&
-                    this.state.endDate
+                    this.state.date
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -339,10 +313,10 @@ class Spending extends Component {
                     <input className="form-control" placeholder="item" />                     
                   ) : null}
                     <button onClick={this.showInput}>Edit</button> */}
+                    <button className="modal-close" onClick={this.closeModal}>close</button>
                     <button className="delete-btn" onClick={this.deleteSpendItem}>
                     delete
                     </button>
-                    <button className="modal-close" onClick={this.closeModal}>close</button>
                   </form>
                   </div>
                 </Modal>

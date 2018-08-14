@@ -40,6 +40,8 @@
     color: black;
     text-align: center;
     font-size: 50px;
+    border-bottom: 1px solid gray;
+    padding-bottom: 10px;
 }
 
 .modal-details {
@@ -48,15 +50,19 @@
 }
 
 .modal-close {
-    float: left;
+    float: right;
     background: #3174ad;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 .delete-btn {
-    float: right;
+    float: left;
     color: white;
     background: #3174ad;
-    border-radius: 4px;
+    border-radius: 3px;
+}
+
+.ReactModal__Content--after-open {
+    width: 40%;
 }
 /* ============ */
