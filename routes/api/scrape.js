@@ -5,7 +5,11 @@ var request = require("request");
 router.get("/", function (req, res) {
 
     request("https://www.quickenloans.com/mortgage-rates", function (error, response, html) {
-
+        if (error) {
+            return res.json({message: error.message})
+        
+        }
+        console.log(html);
         let $ = cheerio.load(html);
 
         let results = [];
