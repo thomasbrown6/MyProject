@@ -14,3 +14,23 @@
     padding-bottom: 5px;
 }
 
+
+.react-datepicker__time-list {
+    padding: 0;
+}
+
+.react-datepicker__input-container {
+    opacity: 0.9;
+    width: 387px;
+}
+
+.datePickerEndDate {
+    margin-top: 10px;
+    height: 38px;
+    border: gray;
+}
+
+.datePickerStartDate {
+    height: 38px;
+    border: gray;
+}

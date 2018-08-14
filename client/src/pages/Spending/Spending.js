@@ -4,23 +4,22 @@ import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
 import "./Spending.css";
 import "../Bills/Bills.css";
-// import { List, ListItem } from "../../components/List";
-// import DeleteBtn from "../../components/DeleteBtn";
-// import moment from "moment";
+import moment from "moment";
 import Calendar from "react-big-calendar";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+Calendar.setLocalizer(Calendar.momentLocalizer(moment));
 
-let allViews = Object.keys(Calendar.Views).map(k => Calendar.Views[k])
+
 
 class Spending extends Component {
   state = {
     item: "",
     category: "",
     amount: "",
-    date: "",
+    startDate: null,
+    endDate: null,
     spendings: [],
     events: [
       {
@@ -43,19 +42,12 @@ class Spending extends Component {
       .then(res => {
         const events = res.data.map(event => ({
           title: event.item,
-          start: event.date,
-          end: event.date,
+          start: moment(event.startDate).toDate(),
+          end: moment(event.endDate).toDate(),
           amount: event.amount
         }));
         this.setState({ events });
 
-        // this.setState({
-        //   spendings: res.data,
-        //   item: "",
-        //   category: "",
-        //   amount: "",
-        //   date: ""
-        // });
       })
       .catch(err => console.log(err));
   };
@@ -70,22 +62,26 @@ class Spending extends Component {
   };
 
   // Handle change for the date in the date picker
-  handleChange = date => {
+  handleChangeStart = startDate => {
     this.setState({
-      date: date,
-      
-    })
+      startDate: startDate
+    });
   };
 
-    
-    // Handle change for the category in the category dropdown
-    handleCateChange = category => {
-      console.log(category.target.value)
+    // Handle change for the date in the date picker
+    handleChangeEnd = endDate => {
       this.setState({
-        category: category.target.value,
-        
-      })
+        endDate: endDate
+      });
     };
+
+  // Handle change for the category in the category dropdown
+  handleCateChange = category => {
+    console.log(category.target.value);
+    this.setState({
+      category: category.target.value
+    });
+  };
 
   // Delete a spending item from the database
   deleteSpendItem = id => {
@@ -94,22 +90,27 @@ class Spending extends Component {
       .catch(err => console.log(err));
   };
 
+  // Shows alert of spending item details
   handleSelectEvent(event) {
-    console.log(event);
-    alert(event.title + "\n Amount: " + 
-    event.amount);
-}
-
+    alert(event.title + "\n Amount: " + event.amount);
+  }
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.item && this.state.category && this.state.amount && this.state.date) {
+    if (
+      this.state.item &&
+      this.state.category &&
+      this.state.amount &&
+      this.state.startDate &&
+      this.state.endDate
+    ) {
       API.saveSpending({
         item: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        date: this.state.date
-      }) // need to load spending
+        startDate: moment(this.state.startDate).toDate(),
+        endDate: moment(this.state.endDate).toDate()
+      }) // load spending
         .then(res => this.loadSpendings())
         .catch(err => console.log("Front end error" + err));
     } else {
@@ -131,41 +132,75 @@ class Spending extends Component {
                 placeholder="Item name"
               />
               <div className="form-group">
-                <select className="custom-select" id="inputGroupSelect01"
-                    value={this.state.category}
-                    onChange={this.handleCateChange} 
-                    >
-                    <option value="" disabled >Category</option>
-                    <option value="Food">Food</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Car">Car</option>
-                    <option value="Family">Family</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Gifts">Gifts</option>
-                    <option value="Investment">Investment</option>
-                    <option value="Vacation">Vacation</option>
-                    <option value="Emergency">Emergency</option>
-                    <option value="Misc">Misc</option>
+                <select
+                  className="custom-select"
+                  id="inputGroupSelect01"
+                  value={this.state.category}
+                  onChange={this.handleCateChange}
+                >
+                  <option value="" disabled>
+                    Category
+                  </option>
+                  <option value="Car">Car</option>
+                  <option value="Emergency">Emergency</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Family">Family</option>
+                  <option value="Food">Food</option>
+                  <option value="Gifts">Gifts</option>
+                  <option value="Investment">Investment</option>
+                  <option value="Misc">Misc</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Vacation">Vacation</option>
+                  <option value="Work">Work</option>
                 </select>
               </div>
-              
+
               <Input
                 value={this.state.amount}
                 onChange={this.handleInputChange}
                 name="amount"
                 placeholder="Enter amount"
               />
-                <div className="form-group">
+              <div className="form-group">
                 <DatePicker
-                  selected={this.state.date ? this.state.date : null}
-                  onChange={this.handleChange.bind(this)}
+                  className="datePickerStartDate"
+                  selected={this.state.startDate ? this.state.startDate : null}
+                  onChange={this.handleChangeStart.bind(this)}
+                  selectsStart
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
                   placeholderText="Date"
-                />                
-                </div>
+                  showTimeSelect
+                  timeFormat="hh:mm:a"
+                  timeIntervals={15}
+                  dateFormat="LLL"
+                  timeCaption="time"
+                />
+                <DatePicker
+                  className="datePickerEndDate"
+                  selected={this.state.endDate ? this.state.endDate : null}
+                  onChange={this.handleChangeEnd.bind(this)}
+                  selectsEnd
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                  placeholderText="Date"
+                  showTimeSelect
+                  timeFormat="hh:mm:a"
+                  timeIntervals={15}
+                  dateFormat="LLL"
+                  timeCaption="time"
+                />
+              </div>
 
               <FormBtn
                 disabled={
-                  !(this.state.item && this.state.category && this.state.amount && this.state.date)
+                  !(
+                    this.state.item &&
+                    this.state.category &&
+                    this.state.amount &&
+                    this.state.startDate &&
+                    this.state.endDate
+                  )
                 }
                 onClick={this.handleFormSubmit}
               >
@@ -173,20 +208,21 @@ class Spending extends Component {
               </FormBtn>
             </form>
           </Col>
-          <Col size="8" >
+          <Col size="8">
             <div className="Billapp">
               <Calendar
                 selectable
                 popup
-                onSelectEvent={(event) =>this.handleSelectEvent(event)}
+                onSelectEvent={event => this.handleSelectEvent(event)}
                 defaultDate={new Date()}
                 defaultView="month"
                 events={this.state.events}
-                views={allViews}
+                showMultiDayTimes
+                step={60}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
             </div>
-            </Col>
+          </Col>
         </Row>
       </Wrapper>
     );
@@ -194,8 +230,6 @@ class Spending extends Component {
 }
 
 export default Spending;
-
-
 
 // <div className="table">
 //               <h1 className="spendingList">Spending List</h1>

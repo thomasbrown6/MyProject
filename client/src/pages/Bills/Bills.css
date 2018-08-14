@@ -1,47 +1,71 @@
 .Billapp {
-    text-align: center;
-  }
-  
-  .Billapp-logo {
-    animation: Billapp-logo-spin infinite 20s linear;
-    height: 80px;
-  }
-  
-  .Billapp-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-  }
-  
-  .Billapp-title {
-    font-size: 1.5em;
-  }
-  
-  .Billapp-intro {
-    font-size: large;
-  }
-  
-  @keyframes Billapp-logo-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  /* Calender */
-  .rbc-calendar {
-    width: 90%;
-    background: white;
-    opacity: 0.9;
-  }
+  text-align: center;
+}
 
-  .rbc-today {
-    background: cornflowerblue;
-  }
+.Billapp-logo {
+  animation: Billapp-logo-spin infinite 20s linear;
+  height: 80px;
+}
 
-  .rbc-event {
-    background: black;
-  }
+.Billapp-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
 
-  .rbc-event.rbc-selected {
-    background: gray;
+.Billapp-title {
+  font-size: 1.5em;
+}
+
+.Billapp-intro {
+  font-size: large;
+}
+
+@keyframes Billapp-logo-spin {
+  from {
+    transform: rotate(0deg);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Calender */
+.rbc-calendar {
+  width: 90%;
+  background: white;
+  opacity: 0.9;
+}
+
+.rbc-today {
+  background: cornflowerblue;
+}
+
+.rbc-event {
+  background: black;
+}
+
+.rbc-event.rbc-selected {
+  background: gray;
+}
+
+.react-datepicker__time-list {
+  padding: 0;
+}
+
+.react-datepicker__input-container {
+  opacity: 0.9;
+  width: 387px;
+}
+
+.datePickerEndDate {
+  margin-top: 10px;
+  height: 38px;
+  border: gray;
+}
+
+.datePickerStartDate {
+  height: 38px;
+  border: gray;
+}

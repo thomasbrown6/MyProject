@@ -5,7 +5,8 @@ const spendingSchema = new Schema({
   item: { type: String, required: true },
   category: { type: String, required: true },
   amount: { type: Number, required: true },
-  date: { type: Date, default: Date.now }
+  startDate: { type: Date, default: Date.now },
+  endDate: { type: Date, default: Date.now }
 });
 
 const Spending = mongoose.model("Spending", spendingSchema);
