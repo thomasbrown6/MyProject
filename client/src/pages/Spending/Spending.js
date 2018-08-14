@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
+import { app } from "../../config";
 // NPMs =========================================
 import moment from "moment";
 import Calendar from "react-big-calendar";
@@ -12,7 +13,6 @@ import Modal from 'react-modal';
 import "./Spending.css";
 import "../Bills/Bills.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { app } from "../../config";
 
 // Localizer for Calendar
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
@@ -40,7 +40,6 @@ class Spending extends Component {
     category: "",
     amount: "",
     date: null,
-    spendings: [],
     modalIsOpen: false,
     modalItem: {
       id: 0,
@@ -112,16 +111,8 @@ class Spending extends Component {
 
   // Handle change for the category in the category dropdown
   handleCategoryChange = category => {
-    console.log(category.target.value);
-    this.setState({
-      category: category.target.value
-    });
+    this.setState({ category: category.target.value });
   };
-
-  // Shows alert of spending item details
-  handleSelectEvent(event) {
-    alert(event.title + "\n Amount: " + event.amount);
-  }
 
   //============Methods for modal ================//
   openModal = (item) => {
@@ -183,10 +174,18 @@ class Spending extends Component {
         category: this.state.category,
         amount: this.state.amount,
         date: moment(this.state.date).toDate(),
+        //added email to associate to current logged in user
         email: this.state.email
-      }) // load spending
-
-        .then(res => this.loadSpendings())
+      })
+        .then(res => {
+          this.loadSpendings();
+          this.setState({
+            item: "",
+            category: "",
+            amount: "",
+            date: ""
+          });
+        })
         .catch(err => console.log("Front end error" + err));
     } else {
       return alert("Please fill out all inputs");

@@ -1,30 +1,58 @@
 import React, { Component } from "react";
+// Componements =====================================
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
+import API from "../../utils/API";
+import { app } from "../../config";
+// NPMs =============================================
 import Calendar from "react-big-calendar";
 import moment from "moment";
-import API from "../../utils/API";
+import DatePicker from "react-datepicker";
+import Modal from "react-modal";
+// Styles ===========================================
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./Bills.css";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { app } from "../../config";
-
+// Localizer for Calendar
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
+
+// Need to set app element for Modal to avoid potential errors
+Modal.setAppElement("#root");
+
+// Styles for modal
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)"
+  }
+};
 
 class Bills extends Component {
   state = {
     item: "",
     category: "",
     amount: "",
-    startDate: null,
-    endDate: null,
+    date: null,
+    modalIsOpen: false,
+    modalItem: {
+      id: 0,
+      item: "",
+      category: "",
+      amount: 0,
+      date: null,
+      showInput: false
+    },
     events: [
       {
         start: new Date(),
         end: new Date(),
-        title: ""
+        title: "",
+        amount: 0
       }
     ],
     //added email LH
@@ -54,7 +82,9 @@ class Bills extends Component {
             title: event.payee,
             start: moment(event.dueDate).toDate(),
             end: moment(event.dueDate).toDate(),
-            amount: event.amount
+            amount: event.amount,
+            id: event._id,
+            category: event.category
           }));
           this.setState({ events });
         }
@@ -62,31 +92,12 @@ class Bills extends Component {
       .catch(err => console.error(err));
   };
 
-  // Deletes a bill from the database with a given id, then reloads the Bills page
-  deleteBill = id => {
-    API.deleteBill(id)
-      .then(res => this.loadBills())
-      .catch(err => console.log(err));
-  };
-
   // Handle change for the date in the date picker
-  handleChangeStart = startDate => {
+  handleChangeDate = date => {
     this.setState({
-      startDate: startDate
+      date: date
     });
   };
-
-  // Handle change for the date in the date picker
-  handleChangeEnd = endDate => {
-    this.setState({
-      endDate: endDate
-    });
-  };
-
-  // Shows alert of bill details
-  handleSelectEvent(event) {
-    alert(event.title + "\n Amount: " + event.amount);
-  }
 
   // Sets the state as the user types the input
   handleInputChange = event => {
@@ -97,9 +108,45 @@ class Bills extends Component {
     });
   };
 
-  handleDropdownChange = event => {
-    this.setState({ category: event.target.value });
+  // Handle change for the category in the category dropdown
+  handleCategoryChange = category => {
+    this.setState({ category: category.target.value });
   };
+
+  //============Methods for modal ================//
+  openModal = item => {
+    this.setState({
+      modalIsOpen: true,
+      modalItem: {
+        id: item.id,
+        item: item.title,
+        category: item.category,
+        amount: item.amount,
+        date: item.start
+      }
+    });
+  };
+
+  afterOpenModal = () => {
+    // references are now sync'd and can be accessed.
+  };
+
+  closeModal = () => {
+    this.setState({ modalIsOpen: false });
+  };
+
+  // Deletes a bill from the database with a given id, then reloads the Bills page
+  deleteBill = event => {
+    event.preventDefault();
+    API.deleteBill(this.state.modalItem.id)
+      .then(res => {
+        this.closeModal();
+        this.loadBills();
+      })
+      .catch(err => console.log(err));
+  };
+  //==============================================//
+
 
   // Run this function for creating a new bill
   handleFormSubmit = event => {
@@ -109,16 +156,14 @@ class Bills extends Component {
       this.state.item &&
       this.state.category &&
       this.state.amount &&
-      this.state.startDate &&
-      this.state.endDate &&
+      this.state.date &&
       this.state.email
     ) {
       API.saveBill({
         payee: this.state.item,
         category: this.state.category,
         amount: this.state.amount,
-        dueDate: moment(this.state.startDate).toDate(),
-
+        dueDate: moment(this.state.date).toDate(),
         //added email to associate to current logged in user
         email: this.state.email
       })
@@ -167,7 +212,7 @@ class Bills extends Component {
                   className="custom-select"
                   id="inputGroupSelect02"
                   value={this.state.category}
-                  onChange={this.handleDropdownChange}
+                  onChange={this.handleCategoryChange}
                 >
                   <option value="" disabled>
                     Category
@@ -183,7 +228,6 @@ class Bills extends Component {
                   <option value="Phone">Phone</option>
                   <option value="Rent">Rent</option>
                   <option value="Utilities">Utilities</option>
-                  
                 </select>
               </div>
               <Input
@@ -195,25 +239,11 @@ class Bills extends Component {
               <div className="form-group">
                 <DatePicker
                   className="datePickerStartDate"
-                  selected={this.state.startDate ? this.state.startDate : null}
-                  onChange={this.handleChangeStart.bind(this)}
+                  selected={this.state.date ? this.state.date : null}
+                  onChange={this.handleChangeDate.bind(this)}
                   selectsStart
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
-                  placeholderText="Date"
-                  showTimeSelect
-                  timeFormat="hh:mm:a"
-                  timeIntervals={15}
-                  dateFormat="LLL"
-                  timeCaption="time"
-                />
-                <DatePicker
-                  className="datePickerEndDate"
-                  selected={this.state.endDate ? this.state.endDate : null}
-                  onChange={this.handleChangeEnd.bind(this)}
-                  selectsEnd
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
+                  startDate={this.state.date}
+                  endDate={this.state.date}
                   placeholderText="Date"
                   showTimeSelect
                   timeFormat="hh:mm:a"
@@ -228,8 +258,7 @@ class Bills extends Component {
                     this.state.item &&
                     this.state.category &&
                     this.state.amount &&
-                    this.state.startDate &&
-                    this.state.endDate
+                    this.state.date 
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -243,7 +272,7 @@ class Bills extends Component {
               <Calendar
                 selectable
                 popup
-                onSelectEvent={event => this.handleSelectEvent(event)}
+                onSelectEvent={event => this.openModal(event)}
                 defaultDate={new Date()}
                 defaultView="month"
                 events={this.state.events}
@@ -251,6 +280,33 @@ class Bills extends Component {
                 step={60}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
+              <Modal
+                  isOpen={this.state.modalIsOpen}
+                  onAfterOpen={this.afterOpenModal}
+                  onRequestClose={this.closeModal}
+                  style={customStyles}
+                  contentLabel="Example Modal"
+                >
+                  <div>
+                  <h2 className="modal-heading">{this.state.modalItem.item}</h2>
+                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
+                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
+                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <form>
+                  {/* {this.state.modalItem.showInput ? (
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" />                     
+                  ) : null}
+                    <button onClick={this.showInput}>Edit</button> */}
+                    <button className="modal-close" onClick={this.closeModal}>close</button>
+                    <button className="delete-btn" onClick={this.deleteBill}>
+                    delete
+                    </button>
+                  </form>
+                  </div>
+                </Modal>
             </div>
           </Col>
         </Row>
