@@ -10,13 +10,7 @@ import { app } from "../../config";
 
 class Organizer extends Component {
   state = {
-    data: [
-      { title: "Data 1", value: 100, color: "red" },
-      { title: "Data 2", value: 60, color: "blue" },
-      { title: "Data 3", value: 30, color: "green" },
-      { title: "Data 4", value: 20, color: "orange" },
-      { title: "Data 5", value: 10, color: "grey" }
-    ],
+    data: [],
     upcomingBills: [],
     email: ""
   };
