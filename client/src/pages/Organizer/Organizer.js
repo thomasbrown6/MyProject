@@ -6,6 +6,8 @@ import DeleteBtn from "../../components/DeleteBtn";
 import moment from "moment";
 import API from "../../utils/API";
 import "./Organizer.css";
+import { app } from "../../config";
+
 
 class Organizer extends Component {
   state = {
@@ -29,16 +31,18 @@ class Organizer extends Component {
   getUpcomingBills = () => {
     API.getBills()
       .then(res => {
-        const arr = [];
+        const upcoming = [];
+        console.log(res.data);
 
+        //will loop through bills for particular user and show bill due in future
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].email === this.state.email) {
-            // if (moment(res.data[i].dueDate).isAfter()) {
-              arr.push(res.data[i]);
-            // }
+            if (moment(res.data[i].dueDate).isAfter()) {
+              upcoming.push(res.data[i]);
+            }
           }
         }
-        this.setState({ upcomingBills: arr });
+        this.setState({ upcomingBills: upcoming });
       })
       .catch(err => console.error(err));
   };
@@ -71,6 +75,18 @@ class Organizer extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
   };
+
+  //checks which user is logged in
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          email: user.email
+        });
+      }
+    });
+  }
 
   render() {
     return (
