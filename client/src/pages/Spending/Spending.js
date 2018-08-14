@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
-import DeleteBtn from "../../components/DeleteBtn";
 // NPMs =========================================
 import moment from "moment";
 import Calendar from "react-big-calendar";
