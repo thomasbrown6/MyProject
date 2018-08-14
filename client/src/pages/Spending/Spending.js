@@ -1,15 +1,35 @@
 import React, { Component } from "react";
+// Components ===================================
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
-import "./Spending.css";
-import "../Bills/Bills.css";
+import DeleteBtn from "../../components/DeleteBtn";
+// NPMs =========================================
 import moment from "moment";
 import Calendar from "react-big-calendar";
 import DatePicker from "react-datepicker";
+import Modal from 'react-modal';
+// Styles =======================================
+import "./Spending.css";
+import "../Bills/Bills.css";
 import "react-datepicker/dist/react-datepicker.css";
-
+// Localizer for Calendar
 Calendar.setLocalizer(Calendar.momentLocalizer(moment));
+
+// Need to set app element for Modal to avoid potential errors
+Modal.setAppElement("#root");
+
+// Styles for modal
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
 
 
 
@@ -21,6 +41,15 @@ class Spending extends Component {
     startDate: null,
     endDate: null,
     spendings: [],
+    modalIsOpen: false,
+    modalItem: {
+      id: 0,
+      item: "",
+      category: "",
+      amount: 0,
+      date: null,
+      showInput: false
+    },
     events: [
       {
         start: new Date(),
@@ -43,8 +72,10 @@ class Spending extends Component {
         const events = res.data.map(event => ({
           title: event.item,
           start: moment(event.startDate).toDate(),
-          end: moment(event.endDate).toDate(),
-          amount: event.amount
+          end: moment(event.startDate).toDate(),
+          amount: event.amount,
+          id: event._id,
+          category: event.category
         }));
         this.setState({ events });
 
@@ -76,18 +107,11 @@ class Spending extends Component {
     };
 
   // Handle change for the category in the category dropdown
-  handleCateChange = category => {
+  handleCategoryChange = category => {
     console.log(category.target.value);
     this.setState({
       category: category.target.value
     });
-  };
-
-  // Delete a spending item from the database
-  deleteSpendItem = id => {
-    API.deleteSpending(id)
-      .then(res => this.loadSpendings())
-      .catch(err => console.log(err));
   };
 
   // Shows alert of spending item details
@@ -95,6 +119,51 @@ class Spending extends Component {
     alert(event.title + "\n Amount: " + event.amount);
   }
 
+  //============Methods for modal ================//
+  openModal = (item) => {
+    this.setState({
+      modalIsOpen: true,
+      modalItem:{
+        id: item.id,
+        item: item.title,
+        category: item.category,
+        amount: item.amount,
+        date: item.start
+      } 
+    });
+  };
+ 
+  afterOpenModal = () => {
+    // references are now sync'd and can be accessed.
+  };
+ 
+  closeModal = () => {
+    this.setState({modalIsOpen: false});
+  };
+
+    // Delete a spending item from the database
+    deleteSpendItem = event => {
+      event.preventDefault();
+      API.deleteSpending(this.state.modalItem.id)
+        .then(res => {
+          this.closeModal();
+          this.loadSpendings();
+        })
+        .catch(err => console.log(err));
+    };
+
+  // Method to show input so user can update item
+  // showInput = event => {
+  //   event.preventDefault();
+  //   this.setState({
+  //     modalItem: {
+  //     showInput: true
+  //   }
+  // });
+  // }
+  //==============================================//
+
+  // Handles the submission of the form
   handleFormSubmit = event => {
     event.preventDefault();
     if (
@@ -136,7 +205,7 @@ class Spending extends Component {
                   className="custom-select"
                   id="inputGroupSelect01"
                   value={this.state.category}
-                  onChange={this.handleCateChange}
+                  onChange={this.handleCategoryChange}
                 >
                   <option value="" disabled>
                     Category
@@ -213,7 +282,8 @@ class Spending extends Component {
               <Calendar
                 selectable
                 popup
-                onSelectEvent={event => this.handleSelectEvent(event)}
+                //event => this.handleSelectEvent(event)
+                onSelectEvent={event => this.openModal(event)}
                 defaultDate={new Date()}
                 defaultView="month"
                 events={this.state.events}
@@ -221,6 +291,33 @@ class Spending extends Component {
                 step={60}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
+                <Modal
+                  isOpen={this.state.modalIsOpen}
+                  onAfterOpen={this.afterOpenModal}
+                  onRequestClose={this.closeModal}
+                  style={customStyles}
+                  contentLabel="Example Modal"
+                >
+                  <div>
+                  <h2 className="modal-heading">{this.state.modalItem.item}</h2>
+                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
+                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
+                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <form>
+                  {/* {this.state.modalItem.showInput ? (
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" />                     
+                  ) : null}
+                    <button onClick={this.showInput}>Edit</button> */}
+                    <button className="delete-btn" onClick={this.deleteSpendItem}>
+                    delete
+                    </button>
+                    <button className="modal-close" onClick={this.closeModal}>close</button>
+                  </form>
+                  </div>
+                </Modal>
             </div>
           </Col>
         </Row>
