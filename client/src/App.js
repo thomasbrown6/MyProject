@@ -107,7 +107,7 @@ class App extends Component {
                 path="/"
                 render={props => {
                   return (
-                    <Login setCurrentUser={this.setCurrentUser} {...props} />
+                    <Login setCurrentUser={this.setCurrentUser} authenticated={this.state.authenticated} {...props} />
                   );
                 }}
               />

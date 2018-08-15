@@ -19,9 +19,6 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.authWithEmailPassword = this.authWithEmailPassword.bind(this);
-    this.state = {
-      redirect: false
-    };
   }
 
 
@@ -34,18 +31,17 @@ class Login extends Component {
       .then(providers => {
         if (providers.length === 0) {
           // create user
-          app.auth().createUserWithEmailAndPassword(email, password);
-          this.setState({ redirect: true });
+          return app.auth().createUserWithEmailAndPassword(email, password);
         } else {
           // sign user in
-          app.auth().signInWithEmailAndPassword(email, password);
-          this.setState({ redirect: true });
+          return app.auth().signInWithEmailAndPassword(email, password);
         }
       })
       .then(user => {
-        if (user && user.email) {
+        if (user && user.user.email) {
           //this.loginForm.reset();
           this.props.setCurrentUser(user);
+          this.setState({ redirect: true });
         }
       })
       .catch(error => {
@@ -54,8 +50,8 @@ class Login extends Component {
   }
 
   render() {
-    if (this.state.redirect) {
-      console.log("This should say true: " + this.state.redirect)
+    console.log(this.state)
+    if (this.props.authenticated) {
       return <Redirect to="/home" />;
     }
     return (
