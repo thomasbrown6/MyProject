@@ -82,5 +82,30 @@ export default {
   // Updates a user to the database
   updateUser: function(id) {
     return axios.put("/api/users", id);
+  },
+
+  // ============================
+  // INCOME FUNCTIONS
+  // ============================
+
+  getIncomes: function() {
+    return axios.get("/api/incomes");
+  },
+  // Gets the bill with the given id
+  getIncome: function(id) {
+    return axios.get("/api/incomes/" + id);
+  },
+  // Deletes the bill with the given id
+  deleteIncome: function(id) {
+    return axios.delete("/api/incomes/" + id);
+  },
+  saveIncome: function(incomeData) {
+    console.log("Hitting API.js");
+    console.log(incomeData);
+    return axios.put("/api/incomes", incomeData);
+  },
+  // Updates a spending to the database
+  updateIncome: function(id) {
+    return axios.put("/api/incomes", id);
   }
 };

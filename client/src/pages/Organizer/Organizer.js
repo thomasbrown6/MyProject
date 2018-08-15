@@ -7,17 +7,24 @@ import moment from "moment";
 import API from "../../utils/API";
 import "./Organizer.css";
 import { app } from "../../config";
+import { Input, FormBtn } from "../../components/Form";
+
 
 class Organizer extends Component {
   state = {
     data: [],
     upcomingBills: [],
-    email: ""
+    email: "",
+    monthlyIncome: [0],
+    amount: "",
+    date: ""
   };
   // When the component mounts, load all the bills into the calender
   componentDidMount() {
     this.getUpcomingBills();
     this.getSpendingItems();
+    this.loadIncome();
+  
   }
 
   // Loads all the upcomingBills into the calender
@@ -98,6 +105,66 @@ class Organizer extends Component {
     event.preventDefault();
   };
 
+  //get the income from incomes db
+  loadIncome = () => {
+    API.getIncomes()
+      .then(res =>
+        {
+          const filteredIncome=[];
+          //Here I added the formula to assign each user with their spending
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].email === this.state.email) {
+                filteredIncome.push(res.data[i]);
+            }
+          }
+
+          const amounts = filteredIncome.map(income => ({
+            amount: income.amount
+          }));
+
+          let amountsSorted=amounts.sort(function(a,b) { 
+            return new Date(a.start).getTime() - new Date(b.start).getTime() 
+        });
+
+          console.log(amountsSorted);
+          console.log("currentIncome");
+
+          const incomeObject = amounts[Object.keys(amounts)[0]];
+          const monthIncome = [];
+
+          for (var amount in incomeObject) {
+            monthIncome.push(incomeObject[amount]);
+            break;
+          }
+          this.setState({ monthlyIncome: monthIncome });
+        }
+      )
+      .catch(err => console.error(err));
+  };
+
+  handleFormSubmit = event => {
+    event.preventDefault();
+    if (this.state.amount) {
+      API.saveIncome({
+        amount: this.state.amount,
+        date: moment().format(),
+        email: this.state.email
+      }) // need to load income
+        .then(res => this.loadIncome())
+        .catch(err => console.log("Front end error" + err));
+    } else {
+      return alert("Please fill out all monthly income");
+    }
+  };
+
+  handleInputChange = event => {
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value
+    });
+  };
+
   //checks which user is logged in
   componentWillMount() {
     app.auth().onAuthStateChanged(user => {
@@ -115,11 +182,34 @@ class Organizer extends Component {
       <Wrapper>
         <Row>
           <Col size="4">
-            <Card title="Income" body1="$2480.00" />
+          <form>
+              <label className="spending-label">Monthly Income:</label>
+              <Input
+                value={this.state.amount}
+                onChange={this.handleInputChange}
+                name="amount"
+                placeholder="Enter amount"
+              />
+              <FormBtn
+                disabled={!this.state.amount}
+                onClick={this.handleFormSubmit}
+              >
+                Submit
+              </FormBtn>
+            </form>
+            <br />
+            <div className="incomeApp">
+              <Card
+                title="Income (current month)"
+                body1={`$`+this.state.monthlyIncome}
+              />
+            </div>
             <Card
               title="Amount Saved (current month)"
-              body1={this.state.savings}
-              body2="$580.00"
+              body1={`+ $`+this.state.monthlyIncome}
+              // body2={`- $`+this.state.spendingTotal}
+              // body3={`- $`+this.state.billsTotal}
+              // body4={`- $`+this.state.billsTotal}
             />
           </Col>
           <Col size="4">
