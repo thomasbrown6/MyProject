@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import { ProfileCard } from "../../components/Card";
-import { EditButton } from "../../components/Button";
 import API from "../../utils/API";
 import "./Account.css";
 import { app } from "../../config";
 
-
 class Account extends Component {
   state = {
-    incomeAmount: "",
+    income: "",
     goalSavings: "",
     spending: "",
     email: ""
@@ -17,31 +15,37 @@ class Account extends Component {
 
   componentDidMount() {
     this.loadUserData();
-  };
+  }
 
   loadUserData = () => {
-      API.getAllSpending()
-        .then(res => 
-            {
-                const getUserSpending = [];
-                
-                for (let i = 0; i < res.data.length; i++) {
-                    if (res.data[i].email === this.state.email) {
-                        getUserSpending.push(res.data[i]);
-                    };
-                };
-                    const totalSpending = [];
-                for (let i = 0; i < getUserSpending.length; i++) {
-                    totalSpending.push(getUserSpending[i].amount)
-                };
+    API.getAllSpending()
+      .then(res => {
+        const getUserSpending = [];
 
-                const addSpendAmount = (accumulator, currentValue) => accumulator + currentValue;
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].email === this.state.email) {
+            getUserSpending.push(res.data[i]);
+          }
+        }
+        const totalSpending = [];
+        for (let i = 0; i < getUserSpending.length; i++) {
+          totalSpending.push(getUserSpending[i].amount);
+        }
 
-                const total = totalSpending.reduce(addSpendAmount);
-                this.setState({ spending: "$" + total });
-            })
-      
-  }
+        const addSpendAmount = (accumulator, currentValue) =>
+          accumulator + currentValue;
+
+        const total = totalSpending.reduce(addSpendAmount);
+        this.setState({ spending: "$" + total });
+      })
+      .catch(err => console.error(err));
+
+    API.getIncomes().then(res => {
+      console.log(res.data[0].amount);
+      let amount = res.data[0].amount;
+      this.setState({ income: "$" + amount });
+    });
+  };
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -49,23 +53,6 @@ class Account extends Component {
     this.setState({
       [name]: value
     });
-  };
-
-
-  handleFormSubmit = event => {
-    event.preventDefault();
-    if (this.state.item && this.state.category && this.state.amount) {
-        API.saveIncome({
-            incomeAmount: this.state.incomeAmount,
-            goalSavings: this.state.goalSavings
-        })      // need to load income
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
-
-    } else {
-        return alert("Please fill out all inputs");
-    }
-
   };
 
   componentWillMount() {
@@ -81,37 +68,24 @@ class Account extends Component {
 
   render() {
     return (
-        <Wrapper>
-            <Row>
-                <Col size="4">
-                    <ProfileCard
-                    title="Account Email:"   // this.user.name
-                    body2={this.state.email}
-                    />
+      <Wrapper>
+        <Row>
+          <Col size="2" />
+          <Col size="8">
+            <ProfileCard
+              body1="Account Email:" // this.user.name
+              body2={this.state.email}
+            />
 
-                    <ProfileCard
-                        body1="Total Spending:"
-                        body2={this.state.spending}
-                    >
-                    </ProfileCard>
-                    <ProfileCard
-                        body1="Income:"
-                        body2={this.state.incomeAmount}
-                    >
-                        <EditButton>
-                            Edit
-                        </EditButton>
-                    </ProfileCard>
-                    <ProfileCard
+            <ProfileCard body1="Total Spending:" body2={this.state.spending} />
+            <ProfileCard body1="Monthly Income:" body2={this.state.income} />
+            {/* <ProfileCard
                         body1="Goal to Save:"
                         body2={this.state.goalSavings}
                     >
-                        <EditButton>
-                            Edit
-                        </EditButton>
-                    </ProfileCard>
-                    
-                    {/* <form>
+                    </ProfileCard> */}
+
+            {/* <form>
                         <label className="account-label">
                             What's your monthly income?
                         </label>
@@ -124,9 +98,9 @@ class Account extends Component {
                         
                         
                     </form> */}
-                </Col>
-                <Col size="1">
-                    {/* <form>
+            {/* </Col>
+                <Col size="1"> */}
+            {/* <form>
                         <label className="account-label">
                             What's your goal for savings this month?
                         </label>
@@ -143,16 +117,14 @@ class Account extends Component {
                         Submit 
                     </FormBtn>
                     </form> */}
-                </Col>
-                <Col size="4">
+          </Col>
+          {/* <Col size="4">
                 
-                </Col>
+                </Col> */}
 
-                <Col size="3">
-            
-                </Col>
-            </Row>
-        </Wrapper>
+          <Col size="2" />
+        </Row>
+      </Wrapper>
     );
   }
 }

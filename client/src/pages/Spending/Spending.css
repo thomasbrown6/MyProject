@@ -21,7 +21,12 @@
 
 .react-datepicker__input-container {
     opacity: 0.9;
-    width: 387px;
+    width: 100%;
+}
+
+.react-datepicker-wrapper {
+    display: inline-block;
+    width: 100%;
 }
 
 .datePickerEndDate {
@@ -66,3 +71,20 @@
     width: 40%;
 }
 /* ============ */
+
+.hideFirst {
+    display: none;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 1200px) {
+
+    .hideFirst {
+        display: inline;
+    }
+    .hideSecond {
+        display: none;
+    }
+
+}
+

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // Components ===================================
-import { Col, Row, Wrapper } from "../../components/Grid";
+import { ColMain, ColMini, Row, Wrapper } from "../../components/Grid";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
 import { app } from "../../config";
@@ -208,7 +208,7 @@ class Spending extends Component {
     return (
       <Wrapper>
         <Row>
-          <Col size="4">
+          <ColMain size="4">
             <form>
               <label className="spending-label">Recent Spending:</label>
               <Input
@@ -278,8 +278,8 @@ class Spending extends Component {
                 Submit
               </FormBtn>
             </form>
-          </Col>
-          <Col size="8">
+          </ColMain>
+          <ColMain size="8">
             <div className="Billapp">
               <Calendar
                 selectable
@@ -321,7 +321,126 @@ class Spending extends Component {
                   </div>
                 </Modal>
             </div>
-          </Col>
+          </ColMain>
+
+
+
+          {/* This is to help mobile responsiveness */}
+          <ColMini size="12">
+            <form>
+              <label className="spending-label">Recent Spending:</label>
+              <Input
+                value={this.state.item}
+                onChange={this.handleInputChange}
+                name="item"
+                placeholder="Item name"
+              />
+              <div className="form-group">
+                <select
+                  className="custom-select"
+                  id="inputGroupSelect01"
+                  value={this.state.category}
+                  onChange={this.handleCategoryChange}
+                >
+                  <option value="" disabled>
+                    Category
+                  </option>
+                  <option value="Car">Car</option>
+                  <option value="Emergency">Emergency</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Family">Family</option>
+                  <option value="Food">Food</option>
+                  <option value="Gifts">Gifts</option>
+                  <option value="Investment">Investment</option>
+                  <option value="Misc">Misc</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Vacation">Vacation</option>
+                  <option value="Work">Work</option>
+                </select>
+              </div>
+
+              <Input
+                value={this.state.amount}
+                onChange={this.handleInputChange}
+                name="amount"
+                placeholder="Enter amount"
+              />
+              <div className="form-group">
+                <DatePicker
+                  className="datePickerStartDate"
+                  selected={this.state.date ? this.state.date : null}
+                  onChange={this.handleChangeDate.bind(this)}
+                  selectsStart
+                  startDate={this.state.date}
+                  endDate={this.state.date}
+                  placeholderText="Date"
+                  // showTimeSelect
+                  // timeFormat="hh:mm:a"
+                  // timeIntervals={15}
+                  // dateFormat="LLL"
+                  // timeCaption="time"
+                />
+              </div>
+
+              <FormBtn
+                disabled={
+                  !(
+                    this.state.item &&
+                    this.state.category &&
+                    this.state.amount &&
+                    this.state.date
+                  )
+                }
+                onClick={this.handleFormSubmit}
+              >
+                Submit
+              </FormBtn>
+            </form>
+          </ColMini>
+          <ColMini size="12">
+            <div className="Billapp">
+              <Calendar
+                selectable
+                popup
+                //event => this.handleSelectEvent(event)
+                onSelectEvent={event => this.openModal(event)}
+                defaultDate={new Date()}
+                defaultView="month"
+                events={this.state.events}
+                showMultiDayTimes
+                step={60}
+                style={{ height: "75vh", width: "100%", float: "right" }}
+              />
+                <Modal
+                  isOpen={this.state.modalIsOpen}
+                  onAfterOpen={this.afterOpenModal}
+                  onRequestClose={this.closeModal}
+                  style={customStyles}
+                  contentLabel="Example Modal"
+                >
+                  <div>
+                  <h2 className="modal-heading">{this.state.modalItem.item}</h2>
+                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
+                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
+                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <form>
+                  {/* {this.state.modalItem.showInput ? (
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" /> 
+                    <input className="form-control" placeholder="item" />                     
+                  ) : null}
+                    <button onClick={this.showInput}>Edit</button> */}
+                    <button className="modal-close" onClick={this.closeModal}>close</button>
+                    <button className="delete-btn" onClick={this.deleteSpendItem}>
+                    delete
+                    </button>
+                  </form>
+                  </div>
+                </Modal>
+            </div>
+          </ColMini>
+
         </Row>
       </Wrapper>
     );

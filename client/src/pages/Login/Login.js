@@ -46,7 +46,6 @@ class Login extends Component {
         if (user && user.email) {
           //this.loginForm.reset();
           this.props.setCurrentUser(user);
-          this.setState({ redirect: true });
         }
       })
       .catch(error => {
@@ -55,7 +54,7 @@ class Login extends Component {
   }
 
   render() {
-    if (this.state.redirect === true) {
+    if (this.state.redirect) {
       console.log("This should say true: " + this.state.redirect)
       return <Redirect to="/home" />;
     }

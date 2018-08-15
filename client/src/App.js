@@ -115,7 +115,7 @@ class App extends Component {
               {/* <Route exact path="/Home" component={Home} /> */}
               <AuthenticatedRoute
                 exact
-                path="/Home"
+                path="/home"
                 authenticated={this.state.authenticated}
                 component={Home}
               />
