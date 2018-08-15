@@ -17,7 +17,12 @@ class Organizer extends Component {
     email: "",
     monthlyIncome: [0],
     amount: "",
-    date: ""
+    date: "",
+    spendingTotal: 0,
+    billsTotal: 0,
+    totalOfAllSpent: 0,
+    month: moment().subtract(0, "month").startOf("month").format('MMMM')
+
   };
   // When the component mounts, load all the bills into the calender
   componentDidMount() {
@@ -31,18 +36,23 @@ class Organizer extends Component {
   getUpcomingBills = () => {
     API.getBills()
       .then(res => {
-        const upcoming = [];
-        console.log(res.data);
+        const arr = [];
+        let total = 0;
 
-        //will loop through bills for particular user and show bill due in future
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].email === this.state.email) {
-            if (moment(res.data[i].dueDate).isAfter()) {
-              upcoming.push(res.data[i]);
+              //added if statement to check for upcoming bills
+            if (moment(res.data[i].dueDate).subtract(0, "month").startOf("month").format('MMMM')===(moment().subtract(0, "month").startOf("month").format('MMMM'))) {
+              arr.push(res.data[i]);
+              total += res.data[i].amount;
+              this.setState({ billsTotal: total });
             }
           }
         }
-        this.setState({ upcomingBills: upcoming });
+        this.setState({ upcomingBills: arr });
+        this.setState({
+          totalOfAllSpent: this.state.totalOfAllSpent + this.state.billsTotal
+        });
       })
       .catch(err => console.error(err));
   };
@@ -71,18 +81,24 @@ class Organizer extends Component {
           Shopping: 0,
           Vacation: 0,
           Work: 0,
-          Entertainment: 0
+          Entertainment: 0,
         };
         let counter = 0;
 
         //this loop adds the dollar amount spend to the respective categories
+        let total = 0;
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].email === this.state.email) {
             if (res.data[i].category in values) {
-              values[res.data[i].category] += res.data[i].amount;
+              if (moment(res.data[i].date).subtract(0, "month").startOf("month").format('MMMM')===(moment().subtract(0, "month").startOf("month").format('MMMM'))) {
+                total += res.data[i].amount;
+                values[res.data[i].category] += res.data[i].amount;
+
+              }
             }
           }
         }
+        this.setState({ spendingTotal: total });
 
         //for every key value pair in values array create an object for the data state
         for (var val in values) {
@@ -200,16 +216,16 @@ class Organizer extends Component {
             <br />
             <div className="incomeApp">
               <Card
-                title="Income (current month)"
+                title={this.state.month+` Income`}
                 body1={`$`+this.state.monthlyIncome}
               />
             </div>
             <Card
-              title="Amount Saved (current month)"
-              body1={`+ $`+this.state.monthlyIncome}
-              // body2={`- $`+this.state.spendingTotal}
-              // body3={`- $`+this.state.billsTotal}
-              // body4={`- $`+this.state.billsTotal}
+              title={this.state.month+` Budget`}
+              body1={`Income    +$` + this.state.monthlyIncome}
+              body2={`Spending  -$` + this.state.spendingTotal}
+              body3={`Bills     -$` + this.state.billsTotal}
+              body4={`Savings  $` + (this.state.monthlyIncome-(this.state.billsTotal+this.state.spendingTotal))}
             />
           </Col>
           <Col size="4">
