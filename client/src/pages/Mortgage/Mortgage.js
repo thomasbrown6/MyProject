@@ -8,9 +8,10 @@ class Mortgage extends Component {
   state = {
     tyf: "",
     fyf: "",
-    sya: "",
+    fyj: "",
     fya: "",
-    tyv: ""
+    tyj: "",
+    oya: ""
   };
   
 
@@ -33,10 +34,11 @@ class Mortgage extends Component {
         console.log(results)
         this.setState({
           fyf : results.data[0].rates[0],
-          tyf : results.data[0].rates[1],
-          sya : results.data[0].rates[2],
-          fya : results.data[0].rates[3],
-          tyv : results.data[0].rates[4]
+          tyf : results.data[0].rates[2],
+          fyj : results.data[0].rates[1],
+          fya : results.data[0].rates[5],
+          tyj : results.data[0].rates[3],
+          oya : results.data[0].rates[4],
         });
       })
 
@@ -62,18 +64,19 @@ class Mortgage extends Component {
           <Col size="4">
             <div className="qlrates">
               <h4>Today's Mortgage Rates</h4>
-              <p className="ctext">Courtesy of <a className="findHome" href="https://www.quickenloans.com/mortgage-rates?qlsource=nav" target="_blank">QuickenLoans</a></p>
+              <p className="ctext">Courtesy of the <a className="findHome" href="https://markets.on.nytimes.com/research/markets/rates/rates.asp" target="_blank" rel="noopener noreferrer">New York Times</a></p>
               <ul>
                 <li>30 Year Fixed: {this.state.tyf}%</li>
                 <li>15 Year Fixed: {this.state.fyf}%</li>
-                <li> 7 Year ARM: {this.state.sya}%</li>
-                <li> 5 Year ARM: {this.state.fya}%</li>
-                <li>30 Year VA: {this.state.tyv}%</li>
+                <li>30 Year Jumbo: {this.state.tyj}%</li>
+                <li>15 Year Jumbo: {this.state.fyj}%</li>
+                <li>5 Year ARM: {this.state.fya}%</li>
+                <li>1 Year ARM: {this.state.oya}%</li>
               </ul>
               <br />
-              <a className="findHome" href="https://www.zillow.com/" target="_blank">Find a Home on Zillow</a>
+              <a className="findHome" href="https://www.zillow.com/" target="_blank" rel="noopener noreferrer">Find a Home on Zillow</a>
               <br />
-              <a className="findHome" href ="https://www.realtor.com/realestateagents" target="_blank">Find a Realtor</a>
+              <a className="findHome" href ="https://www.realtor.com/realestateagents" target="_blank" rel="noopener noreferrer">Find a Realtor</a>
             </div>
           </Col>
         </Row>
