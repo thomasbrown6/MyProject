@@ -107,7 +107,7 @@ class App extends Component {
                 path="/"
                 render={props => {
                   return (
-                    <Login setCurrentUser={this.setCurrentUser} {...props} />
+                    <Login setCurrentUser={this.setCurrentUser} authenticated={this.state.authenticated} {...props} />
                   );
                 }}
               />
@@ -115,7 +115,7 @@ class App extends Component {
               {/* <Route exact path="/Home" component={Home} /> */}
               <AuthenticatedRoute
                 exact
-                path="/Home"
+                path="/home"
                 authenticated={this.state.authenticated}
                 component={Home}
               />

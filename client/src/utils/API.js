@@ -73,9 +73,8 @@ export default {
   deleteUser: function(id) {
     return axios.delete("/api/users/" + id);
   },
-  // Saves a spending to the database
+  // Saves a user to the database
   saveUser: function(userData) {
-    console.log("Hitting API.js");
     console.log(userData);
     return axios.put("/api/users", userData);
   },
@@ -100,7 +99,6 @@ export default {
     return axios.delete("/api/incomes/" + id);
   },
   saveIncome: function(incomeData) {
-    console.log("Hitting API.js");
     console.log(incomeData);
     return axios.put("/api/incomes", incomeData);
   },

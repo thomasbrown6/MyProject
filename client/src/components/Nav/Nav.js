@@ -11,81 +11,92 @@ class Nav extends Component {
           <p className="navbar-name">GET IT</p>
           <p className="navbar-subname">TOGETHER</p>
         </a>
-
-        <ul className="nav nav-tabs justify-content-center">
-          <li className="nav-item">
-            <Link
-              to="/home"
-              className={
-                window.location.pathname === "/home"
-                  ? "nav-link active homeTab"
-                  : "nav-link homeTab"
-              }
-            >
-              HOME
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/organizer"
-              className={
-                window.location.pathname === "/organizer"
-                  ? "nav-link active organizerTab"
-                  : "nav-link organizerTab"
-              }
-            >
-              ORGANIZER
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/spending"
-              className={
-                window.location.pathname === "/spending"
-                  ? "nav-link active spendingTab"
-                  : "nav-link spendingTab"
-              }
-            >
-              SPENDING
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/bills"
-              className={
-                window.location.pathname === "/bills"
-                  ? "nav-link active billTab"
-                  : "nav-link billTab"
-              }
-            >
-              BILLS
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/mortgage"
-              className={
-                window.location.pathname === "/mortgage"
-                  ? "nav-link active mortgageTab"
-                  : "nav-link mortgageTab"
-              }
-            >
-              MORTGAGE
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/account"
-              className={
-                window.location.pathname === "/account"
-                  ? "nav-link active accountTab"
-                  : "nav-link accountTab"
-              }
-            >
-              ACCOUNT
-            </Link>
-          </li>
-          {/* <li className="nav-item">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="nav nav-tabs justify-content-center">
+            <li className="nav-item">
+              <Link
+                to="/home"
+                className={
+                  window.location.pathname === "/home"
+                    ? "nav-link active homeTab"
+                    : "nav-link homeTab"
+                }
+              >
+                HOME
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/organizer"
+                className={
+                  window.location.pathname === "/organizer"
+                    ? "nav-link active organizerTab"
+                    : "nav-link organizerTab"
+                }
+              >
+                ORGANIZER
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/spending"
+                className={
+                  window.location.pathname === "/spending"
+                    ? "nav-link active spendingTab"
+                    : "nav-link spendingTab"
+                }
+              >
+                SPENDING
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/bills"
+                className={
+                  window.location.pathname === "/bills"
+                    ? "nav-link active billTab"
+                    : "nav-link billTab"
+                }
+              >
+                BILLS
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/mortgage"
+                className={
+                  window.location.pathname === "/mortgage"
+                    ? "nav-link active mortgageTab"
+                    : "nav-link mortgageTab"
+                }
+              >
+                MORTGAGE
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/account"
+                className={
+                  window.location.pathname === "/account"
+                    ? "nav-link active accountTab"
+                    : "nav-link accountTab"
+                }
+              >
+                ACCOUNT
+              </Link>
+            </li>
+            {/* <li className="nav-item">
       <Link
           to="/signout"
           className={
@@ -97,34 +108,35 @@ class Nav extends Component {
           SIGN OUT
         </Link>
       </li> */}
-          {this.props.authenticated ? (
-            <li className="nav-item">
-              <Link
-                to="/logout"
-                className={
-                  window.location.pathname === "/logout"
-                    ? "nav-link active signoutTab"
-                    : "nav-link signoutTab"
-                }
-              >
-                LOGOUT
-              </Link>
-            </li>
-          ) : (
-            <li className="nav-item">
-              <Link
-                to="/login"
-                className={
-                  window.location.pathname === "/login"
-                    ? "nav-link active signoutTab"
-                    : "nav-link signoutTab"
-                }
-              >
-                REGISTER/ LOG IN
-              </Link>
-            </li>
-          )}
-        </ul>
+            {this.props.authenticated ? (
+              <li className="nav-item">
+                <Link
+                  to="/logout"
+                  className={
+                    window.location.pathname === "/logout"
+                      ? "nav-link active signoutTab"
+                      : "nav-link signoutTab"
+                  }
+                >
+                  LOGOUT
+                </Link>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <Link
+                  to="/login"
+                  className={
+                    window.location.pathname === "/login"
+                      ? "nav-link active signoutTab"
+                      : "nav-link signoutTab"
+                  }
+                >
+                  REGISTER/ LOG IN
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
       </nav>
     );
   }

@@ -32,3 +32,54 @@ a,
 a:hover {
     color: royalblue;
 }
+
+/* Media Queries */
+@media only screen and (max-width: 1310px) {
+
+    .accountTab {
+        margin-left: 368px;
+    }
+}
+
+@media only screen and (max-width: 1280px) {
+
+    .accountTab {
+        margin-left: 340px;
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+
+    .accountTab {
+        margin-left: 280px;
+    }
+}
+
+@media only screen and (max-width: 1210px) {
+
+    .accountTab {
+        margin-left: 250px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+
+    .accountTab {
+        margin-left: 60px;
+    }
+    
+}
+
+@media only screen and (max-width: 1199px) {
+
+    .accountTab {
+        margin-left: 40px;
+    }
+}
+
+@media only screen and (max-width: 1180px) {
+
+    .accountTab {
+        margin-left: 0px;
+    }
+}
