@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { Toaster, Intent } from "@blueprintjs/core";
 import { app } from "../../config";
 
+
 const loginStyles = {
   width: "90%",
   maxWidth: "315px",
@@ -12,6 +13,8 @@ const loginStyles = {
   padding: "10px",
   backgroundColor: "white"
 };
+
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -21,14 +24,9 @@ class Login extends Component {
     };
   }
 
+
   authWithEmailPassword(event) {
     event.preventDefault();
-    console.log([
-      {
-        email: this.emailInput.value,
-        password: this.passwordInput.value
-      }
-    ]);
     const email = this.emailInput.value;
     const password = this.passwordInput.value;
 
@@ -36,15 +34,17 @@ class Login extends Component {
       .then(providers => {
         if (providers.length === 0) {
           // create user
-          return app.auth().createUserWithEmailAndPassword(email, password);
+          app.auth().createUserWithEmailAndPassword(email, password);
+          this.setState({ redirect: true });
         } else {
           // sign user in
-          return app.auth().signInWithEmailAndPassword(email, password);
+          app.auth().signInWithEmailAndPassword(email, password);
+          this.setState({ redirect: true });
         }
       })
       .then(user => {
         if (user && user.email) {
-          this.loginForm.reset();
+          //this.loginForm.reset();
           this.props.setCurrentUser(user);
           this.setState({ redirect: true });
         }
@@ -56,7 +56,8 @@ class Login extends Component {
 
   render() {
     if (this.state.redirect === true) {
-      return <Redirect to="/Home" />;
+      console.log("This should say true: " + this.state.redirect)
+      return <Redirect to="/home" />;
     }
     return (
       <div style={loginStyles}>
@@ -78,9 +79,6 @@ class Login extends Component {
             style={{ marginBottom: "10px" }}
             className="pt-callout pt-icon-info-sign"
           >
-            <h5>Note</h5>
-            If you don't have an account already, this form will create your
-            account.
           </div>
           <label className="pt-label">
             Email
@@ -112,11 +110,14 @@ class Login extends Component {
             style={{ width: "100%" }}
             type="submit"
             className="pt-button pt-intent-primary"
-            value="Log In"
+            value="Log In/Create an Account"
           />
         </form>
       </div>
     );
   }
+  
 }
+
+
 export default Login;

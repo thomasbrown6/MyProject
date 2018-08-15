@@ -256,11 +256,11 @@ class Spending extends Component {
                   startDate={this.state.date}
                   endDate={this.state.date}
                   placeholderText="Date"
-                  showTimeSelect
-                  timeFormat="hh:mm:a"
-                  timeIntervals={15}
-                  dateFormat="LLL"
-                  timeCaption="time"
+                  // showTimeSelect
+                  // timeFormat="hh:mm:a"
+                  // timeIntervals={15}
+                  // dateFormat="LLL"
+                  // timeCaption="time"
                 />
               </div>
 
