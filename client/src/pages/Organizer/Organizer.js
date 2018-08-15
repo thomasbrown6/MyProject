@@ -217,15 +217,15 @@ class Organizer extends Component {
             <div className="incomeApp">
               <Card
                 title={this.state.month+` Income`}
-                body1={`$`+this.state.monthlyIncome}
+                body1={`$`+parseInt(this.state.monthlyIncome).toFixed(2)}
               />
             </div>
             <Card
               title={this.state.month+` Budget`}
-              body1={`Income    +$` + this.state.monthlyIncome}
-              body2={`Spending  -$` + this.state.spendingTotal}
-              body3={`Bills     -$` + this.state.billsTotal}
-              body4={`Savings  $` + (this.state.monthlyIncome-(this.state.billsTotal+this.state.spendingTotal))}
+              body1={`Income    +$` + parseInt(this.state.monthlyIncome).toFixed(2)}
+              body2={`Spending  -$` + (this.state.spendingTotal).toFixed(2)}
+              body3={`Bills     -$` + (this.state.billsTotal).toFixed(2)}
+              body4={`Savings  $` + (this.state.monthlyIncome-(this.state.billsTotal+this.state.spendingTotal)).toFixed(2)}
             />
           </Col>
           <Col size="4">
