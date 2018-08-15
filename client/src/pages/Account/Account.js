@@ -12,9 +12,36 @@ class Account extends Component {
     incomeAmount: "",
     goalSavings: "",
     spending: "",
-    email:""
+    email: ""
   };
 
+  componentDidMount() {
+    this.loadUserData();
+  };
+
+  loadUserData = () => {
+      API.getAllSpending()
+        .then(res => 
+            {
+                const getUserSpending = [];
+                
+                for (let i = 0; i < res.data.length; i++) {
+                    if (res.data[i].email === this.state.email) {
+                        getUserSpending.push(res.data[i]);
+                    };
+                };
+                    const totalSpending = [];
+                for (let i = 0; i < getUserSpending.length; i++) {
+                    totalSpending.push(getUserSpending[i].amount)
+                };
+
+                const addSpendAmount = (accumulator, currentValue) => accumulator + currentValue;
+
+                const total = totalSpending.reduce(addSpendAmount);
+                this.setState({ spending: "$" + total });
+            })
+      
+  }
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -58,17 +85,17 @@ class Account extends Component {
             <Row>
                 <Col size="4">
                     <ProfileCard
-                    title="Account Email"   // this.user.name
+                    title="Account Email:"   // this.user.name
                     body2={this.state.email}
                     />
 
                     <ProfileCard
-                        body1="Spending"
+                        body1="Total Spending:"
                         body2={this.state.spending}
                     >
                     </ProfileCard>
                     <ProfileCard
-                        body1="Income"
+                        body1="Income:"
                         body2={this.state.incomeAmount}
                     >
                         <EditButton>
@@ -76,7 +103,7 @@ class Account extends Component {
                         </EditButton>
                     </ProfileCard>
                     <ProfileCard
-                        body1="Goal to Save"
+                        body1="Goal to Save:"
                         body2={this.state.goalSavings}
                     >
                         <EditButton>

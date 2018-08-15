@@ -73,7 +73,7 @@ export default {
   deleteUser: function(id) {
     return axios.delete("/api/users/" + id);
   },
-  // Saves a spending to the database
+  // Saves a user to the database
   saveUser: function(userData) {
     console.log("Hitting API.js");
     console.log(userData);
