@@ -9,10 +9,10 @@ import "./Organizer.css";
 import { app } from "../../config";
 import { Input, FormBtn } from "../../components/Form";
 
-
 class Organizer extends Component {
   state = {
-    data: [],
+    spendingPieChart: [],
+    billsPieChart: [],
     upcomingBills: [],
     email: "",
     monthlyIncome: [0],
@@ -21,38 +21,91 @@ class Organizer extends Component {
     spendingTotal: 0,
     billsTotal: 0,
     totalOfAllSpent: 0,
-    month: moment().subtract(0, "month").startOf("month").format('MMMM')
-
+    month: moment()
+      .subtract(0, "month")
+      .startOf("month")
+      .format("MMMM")
   };
+
   // When the component mounts, load all the bills into the calender
   componentDidMount() {
     this.getUpcomingBills();
     this.getSpendingItems();
     this.loadIncome();
-  
   }
 
   // Loads all the upcomingBills into the calender
   getUpcomingBills = () => {
     API.getBills()
       .then(res => {
-        const arr = [];
-        let total = 0;
+        const userUpcomingBills = [];
+        let totalOfBills = 0;
+        const color = [
+          "red",
+          "blue",
+          "green",
+          "orange",
+          "grey",
+          "purple",
+          "yellow",
+          "pink",
+          "grey",
+          "black",
+          "brown"
+        ];
+        const categoryObject = [];
+        let categoryValues = {
+          Car_Payment: 0,
+          Childcare: 0,
+          Gas: 0,
+          Health_and_Fitness: 0,
+          Insurance: 0,
+          Medical: 0,
+          Misc: 0,
+          Personal_Care: 0,
+          Phone: 0,
+          Rent: 0,
+          Utilities: 0
+        };
+        let counter = 0;
 
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].email === this.state.email) {
+            if (res.data[i].category in categoryValues) {
               //added if statement to check for upcoming bills
-            if (moment(res.data[i].dueDate).subtract(0, "month").startOf("month").format('MMMM')===(moment().subtract(0, "month").startOf("month").format('MMMM'))) {
-              arr.push(res.data[i]);
-              total += res.data[i].amount;
-              this.setState({ billsTotal: total });
+              if (
+                moment(res.data[i].dueDate)
+                  .startOf("month")
+                  .format("MMMM") ===
+                moment()
+                  .startOf("month")
+                  .format("MMMM")
+              ) {
+                categoryValues[res.data[i].category] += res.data[i].amount;
+                if (moment().isBefore(moment(res.data[i].dueDate))) {
+                  userUpcomingBills.push(res.data[i]);
+                  totalOfBills += res.data[i].amount;
+
+                  this.setState({ billsTotal: totalOfBills });
+                }
+              }
             }
           }
         }
-        this.setState({ upcomingBills: arr });
+        this.setState({ upcomingBills: userUpcomingBills });
         this.setState({
           totalOfAllSpent: this.state.totalOfAllSpent + this.state.billsTotal
         });
+        for (var val in categoryValues) {
+          let billPieChartSlice = {};
+          billPieChartSlice["title"] = val.toString() + ": $" + categoryValues[val];
+          billPieChartSlice["value"] = categoryValues[val];
+          billPieChartSlice["color"] = color[counter];
+          categoryObject.push(billPieChartSlice);
+          counter++;
+        }
+
+        this.setState({ billsPieChart: categoryObject });
       })
       .catch(err => console.error(err));
   };
@@ -67,10 +120,22 @@ class Organizer extends Component {
   // Loads all the spending items into the pie chart
   getSpendingItems = () => {
     API.getAllSpending()
-      .then(res => {        
-        const color = ["red","blue","green","orange","grey","purple","yellow","pink","grey","magenta","brown"];
+      .then(res => {
+        const color = [
+          "red",
+          "blue",
+          "green",
+          "orange",
+          "grey",
+          "purple",
+          "yellow",
+          "pink",
+          "grey",
+          "magenta",
+          "brown"
+        ];
         const categoryObjects = [];
-        let values = {
+        let categoryValues = {
           Car: 0,
           Emergency: 0,
           Family: 0,
@@ -81,7 +146,7 @@ class Organizer extends Component {
           Shopping: 0,
           Vacation: 0,
           Work: 0,
-          Entertainment: 0,
+          Entertainment: 0
         };
         let counter = 0;
 
@@ -89,11 +154,19 @@ class Organizer extends Component {
         let total = 0;
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].email === this.state.email) {
-            if (res.data[i].category in values) {
-              if (moment(res.data[i].date).subtract(0, "month").startOf("month").format('MMMM')===(moment().subtract(0, "month").startOf("month").format('MMMM'))) {
+            if (res.data[i].category in categoryValues) {
+              if (
+                moment(res.data[i].date)
+                  .subtract(0, "month")
+                  .startOf("month")
+                  .format("MMMM") ===
+                moment()
+                  .subtract(0, "month")
+                  .startOf("month")
+                  .format("MMMM")
+              ) {
                 total += res.data[i].amount;
-                values[res.data[i].category] += res.data[i].amount;
-
+                categoryValues[res.data[i].category] += res.data[i].amount;
               }
             }
           }
@@ -101,18 +174,18 @@ class Organizer extends Component {
         this.setState({ spendingTotal: total });
 
         //for every key value pair in values array create an object for the data state
-        for (var val in values) {
-          let obj = {};
-          obj["title"] = val.toString() + ": $" + values[val];
-          obj["value"] = values[val];
-          obj["color"] = color[counter];
-          console.log(obj);
-          categoryObjects.push(obj);
+        for (var val in categoryValues) {
+          let spendingPieChartSlice = {};
+          spendingPieChartSlice["title"] = val.toString() + ": $" + categoryValues[val];
+          spendingPieChartSlice["value"] = categoryValues[val];
+          spendingPieChartSlice["color"] = color[counter];
+
+          categoryObjects.push(spendingPieChartSlice);
           counter++;
         }
 
         //assign categoryObjects to the data state
-        this.setState({ data: categoryObjects });
+        this.setState({ spendingPieChart: categoryObjects });
       })
       .catch(err => console.error(err));
   };
@@ -124,40 +197,36 @@ class Organizer extends Component {
   //get the income from incomes db
   loadIncome = () => {
     API.getIncomes()
-      .then(res =>
-        {
-          const filteredIncome=[];
-          //Here I added the formula to assign each user with their spending
-          for (let i = 0; i < res.data.length; i++) {
-            if (res.data[i].email === this.state.email) {
-                filteredIncome.push(res.data[i]);
-            }
+      .then(res => {
+        const filteredIncome = [];
+        //Here I added the formula to assign each user with their spending
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].email === this.state.email) {
+            filteredIncome.push(res.data[i]);
           }
-
-          const amounts = filteredIncome.map(income => ({
-            amount: income.amount
-          }));
-
-          let amountsSorted=amounts.sort(function(a,b) { 
-            return new Date(a.start).getTime() - new Date(b.start).getTime() 
-        });
-
-          console.log(amountsSorted);
-          console.log("currentIncome");
-
-          const incomeObject = amounts[Object.keys(amounts)[0]];
-          const monthIncome = [];
-
-          for (var amount in incomeObject) {
-            monthIncome.push(incomeObject[amount]);
-            break;
-          }
-          this.setState({ monthlyIncome: monthIncome });
         }
-      )
+
+        const amounts = filteredIncome.map(income => ({
+          amount: income.amount
+        }));
+
+        // let amountsSorted = amounts.sort(function(a, b) {
+        //   return new Date(a.start).getTime() - new Date(b.start).getTime();
+        // });
+
+        const incomeObject = amounts[Object.keys(amounts)[0]];
+        const monthIncome = [];
+
+        for (var amount in incomeObject) {
+          monthIncome.push(incomeObject[amount]);
+          break;
+        }
+        this.setState({ monthlyIncome: monthIncome });
+      })
       .catch(err => console.error(err));
   };
 
+  //will save the amount inputed by user to database
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.amount) {
@@ -198,7 +267,7 @@ class Organizer extends Component {
       <Wrapper>
         <Row>
           <Col size="4">
-          <form>
+            <form>
               <label className="spending-label">Monthly Income:</label>
               <Input
                 value={this.state.amount}
@@ -216,26 +285,39 @@ class Organizer extends Component {
             <br />
             <div className="incomeApp">
               <Card
-                title={this.state.month+` Income`}
-                body1={`$`+parseInt(this.state.monthlyIncome).toFixed(2)}
+                title={this.state.month + ` Income`}
+                body1={`$` + parseInt(this.state.monthlyIncome,10).toFixed(2)}
               />
             </div>
             <Card
-              title={this.state.month+` Budget`}
-              body1={`Income    +$` + parseInt(this.state.monthlyIncome).toFixed(2)}
-              body2={`Spending  -$` + (this.state.spendingTotal).toFixed(2)}
-              body3={`Bills     -$` + (this.state.billsTotal).toFixed(2)}
-              body4={`Savings  $` + (this.state.monthlyIncome-(this.state.billsTotal+this.state.spendingTotal)).toFixed(2)}
+              title={this.state.month + ` Budget`}
+              body1={
+                `Income    +$` + parseInt(this.state.monthlyIncome,10).toFixed(2)
+              }
+              body2={`Spending  -$` + this.state.spendingTotal.toFixed(2)}
+              body3={`Bills     -$` + this.state.billsTotal.toFixed(2)}
+              body4={
+                `Savings  $` +
+                (
+                  this.state.monthlyIncome -
+                  (this.state.billsTotal + this.state.spendingTotal)
+                ).toFixed(2)
+              }
             />
           </Col>
           <Col size="4">
             <PieChartCard
               title="Spending"
               cardCategory=""
-              data={this.state.data}
+              data={this.state.spendingPieChart}
             />
           </Col>
           <Col size="4">
+            <PieChartCard
+              title="Bills"
+              cardCategory=""
+              data={this.state.billsPieChart}
+            />
             <Card title="Upcoming Bills" />
             <List>
               {this.state.upcomingBills.map(bill => (
