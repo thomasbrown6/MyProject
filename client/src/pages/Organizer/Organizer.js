@@ -82,23 +82,24 @@ class Organizer extends Component {
                   .format("MMMM")
               ) {
                 categoryValues[res.data[i].category] += res.data[i].amount;
+                totalOfBills += res.data[i].amount;
+                
                 if (moment().isBefore(moment(res.data[i].dueDate))) {
                   userUpcomingBills.push(res.data[i]);
-                  totalOfBills += res.data[i].amount;
-
-                  this.setState({ billsTotal: totalOfBills });
                 }
               }
             }
           }
         }
+        this.setState({ billsTotal: totalOfBills });
         this.setState({ upcomingBills: userUpcomingBills });
         this.setState({
           totalOfAllSpent: this.state.totalOfAllSpent + this.state.billsTotal
         });
         for (var val in categoryValues) {
           let billPieChartSlice = {};
-          billPieChartSlice["title"] = val.toString() + ": $" + categoryValues[val];
+          billPieChartSlice["title"] =
+            val.toString() + ": $" + categoryValues[val];
           billPieChartSlice["value"] = categoryValues[val];
           billPieChartSlice["color"] = color[counter];
           categoryObject.push(billPieChartSlice);
@@ -176,7 +177,8 @@ class Organizer extends Component {
         //for every key value pair in values array create an object for the data state
         for (var val in categoryValues) {
           let spendingPieChartSlice = {};
-          spendingPieChartSlice["title"] = val.toString() + ": $" + categoryValues[val];
+          spendingPieChartSlice["title"] =
+            val.toString() + ": $" + categoryValues[val];
           spendingPieChartSlice["value"] = categoryValues[val];
           spendingPieChartSlice["color"] = color[counter];
 
@@ -286,13 +288,14 @@ class Organizer extends Component {
             <div className="incomeApp">
               <Card
                 title={this.state.month + ` Income`}
-                body1={`$` + parseInt(this.state.monthlyIncome,10).toFixed(2)}
+                body1={`$` + parseInt(this.state.monthlyIncome, 10).toFixed(2)}
               />
             </div>
             <Card
               title={this.state.month + ` Budget`}
               body1={
-                `Income    +$` + parseInt(this.state.monthlyIncome,10).toFixed(2)
+                `Income    +$` +
+                parseInt(this.state.monthlyIncome, 10).toFixed(2)
               }
               body2={`Spending  -$` + this.state.spendingTotal.toFixed(2)}
               body3={`Bills     -$` + this.state.billsTotal.toFixed(2)}
