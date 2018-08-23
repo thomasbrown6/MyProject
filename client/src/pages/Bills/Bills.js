@@ -55,7 +55,6 @@ class Bills extends Component {
         amount: 0
       }
     ],
-    //added email LH
     email: ""
   };
 
@@ -217,14 +216,14 @@ class Bills extends Component {
                   <option value="" disabled>
                     Category
                   </option>
-                  <option value="Car Payment">Car Payment</option>
+                  <option value="Car_Payment">Car Payment</option>
                   <option value="Childcare">Childcare</option>
                   <option value="Gas">Gas</option>
-                  <option value="Health & Fitness">Health & Fitness</option>
+                  <option value="Health_and_Fitness">Health & Fitness</option>
                   <option value="Insurance">Insurance</option>
                   <option value="Medical">Medical</option>
                   <option value="Misc">Misc</option>
-                  <option value="Personal Care">Personal Care</option>
+                  <option value="Personal_Care">Personal Care</option>
                   <option value="Phone">Phone</option>
                   <option value="Rent">Rent</option>
                   <option value="Utilities">Utilities</option>
@@ -330,14 +329,14 @@ class Bills extends Component {
                   <option value="" disabled>
                     Category
                   </option>
-                  <option value="Car Payment">Car Payment</option>
+                  <option value="Car_Payment">Car Payment</option>
                   <option value="Childcare">Childcare</option>
                   <option value="Gas">Gas</option>
-                  <option value="Health & Fitness">Health & Fitness</option>
+                  <option value="Health_and_Fitness">Health & Fitness</option>
                   <option value="Insurance">Insurance</option>
                   <option value="Medical">Medical</option>
                   <option value="Misc">Misc</option>
-                  <option value="Personal Care">Personal Care</option>
+                  <option value="Personal_Care">Personal Care</option>
                   <option value="Phone">Phone</option>
                   <option value="Rent">Rent</option>
                   <option value="Utilities">Utilities</option>
