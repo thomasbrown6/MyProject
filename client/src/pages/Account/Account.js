@@ -77,8 +77,8 @@ class Account extends Component {
               body2={this.state.email}
             />
 
-            <ProfileCard body1="Total Spending:" body2={this.state.spending} />
-            <ProfileCard body1="Monthly Income:" body2={this.state.income} />
+            {/* <ProfileCard body1="Total Spending:" body2={this.state.spending} />
+            <ProfileCard body1="Monthly Income:" body2={this.state.income} /> */}
             {/* <ProfileCard
                         body1="Goal to Save:"
                         body2={this.state.goalSavings}
