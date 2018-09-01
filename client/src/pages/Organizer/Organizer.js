@@ -292,7 +292,7 @@ class Organizer extends Component {
                 { 
                   (isNaN(parseInt(this.state.monthlyIncome)))
                     ? `$0.00`
-                    : parseInt(this.state.monthlyIncome, 10).toFixed(2)
+                    : `$`+parseInt(this.state.monthlyIncome, 10).toFixed(2)
                 }
               />
             </div>
