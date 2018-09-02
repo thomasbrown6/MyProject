@@ -24,7 +24,8 @@ class Organizer extends Component {
     month: moment()
       .subtract(0, "month")
       .startOf("month")
-      .format("MMMM")
+      .format("MMMM"),
+    emptyPieChart: [{ title: "No Data", value: 100, color: "#F0FFFF" }]
   };
 
   // When the component mounts, load all the bills into the calender
@@ -45,13 +46,13 @@ class Organizer extends Component {
           "blue",
           "green",
           "orange",
-          "grey",
+          "#FFA07A",
           "purple",
           "yellow",
           "pink",
-          "grey",
-          "magenta",
-          "brown"
+          "#DEB887",
+          "#00FFFF",
+          "#7FFF00"
         ];
         const categoryObject = [];
         let categoryValues = {
@@ -83,7 +84,7 @@ class Organizer extends Component {
               ) {
                 categoryValues[res.data[i].category] += res.data[i].amount;
                 totalOfBills += res.data[i].amount;
-                
+
                 if (moment().isBefore(moment(res.data[i].dueDate))) {
                   userUpcomingBills.push(res.data[i]);
                 }
@@ -127,13 +128,13 @@ class Organizer extends Component {
           "blue",
           "green",
           "orange",
-          "grey",
+          "#FFA07A",
           "purple",
           "yellow",
           "pink",
-          "grey",
-          "magenta",
-          "brown"
+          "#DEB887",
+          "#00FFFF",
+          "#7FFF00"
         ];
         const categoryObjects = [];
         let categoryValues = {
@@ -264,6 +265,22 @@ class Organizer extends Component {
     });
   }
 
+  populatePieGraph = arrNum => {
+    if (arrNum === 1) {
+      const sum1 = this.state.spendingPieChart.reduce(
+        (sum, categories) => sum + categories.value,
+        0
+      );
+      return sum1;
+    } else if (arrNum === 2) {
+      const sum2 = this.state.billsPieChart.reduce(
+        (sum, categories) => sum + categories.value,
+        0
+      );
+      return sum2;
+    }
+  };
+
   render() {
     return (
       <Wrapper>
@@ -288,21 +305,20 @@ class Organizer extends Component {
             <div className="incomeApp">
               <Card
                 title={this.state.month + ` Income`}
-                body1=
-                { 
-                  (isNaN(parseInt(this.state.monthlyIncome)))
+                body1={
+                  isNaN(parseInt(this.state.monthlyIncome))
                     ? `$0.00`
-                    : `$`+parseInt(this.state.monthlyIncome, 10).toFixed(2)
+                    : `$` + parseInt(this.state.monthlyIncome, 10).toFixed(2)
                 }
               />
             </div>
             <Card
               title={this.state.month + ` Budget`}
-              body1=
-              { 
-                (isNaN(parseInt(this.state.monthlyIncome)))
+              body1={
+                isNaN(parseInt(this.state.monthlyIncome))
                   ? `Income:   $0.00`
-                  : `Income:    +$` +parseInt(this.state.monthlyIncome, 10).toFixed(2)
+                  : `Income:    +$` +
+                    parseInt(this.state.monthlyIncome, 10).toFixed(2)
               }
               body2={`Spending:  -$` + this.state.spendingTotal.toFixed(2)}
               body3={`Bills:     -$` + this.state.billsTotal.toFixed(2)}
@@ -319,14 +335,20 @@ class Organizer extends Component {
             <PieChartCard
               title="Spending"
               cardCategory=""
-              data={this.state.spendingPieChart}
+              data={
+                (this.populatePieGraph(1)===0)?
+                this.state.emptyPieChart:this.state.spendingPieChart
+              }
             />
           </Col>
           <Col size="4">
             <PieChartCard
               title="Bills"
               cardCategory=""
-              data={this.state.billsPieChart}
+              data={
+                (this.populatePieGraph(2)===0)?
+                this.state.emptyPieChart:this.state.billsPieChart
+              }
             />
             <Card title="Upcoming Bills" />
             <List>
