@@ -16,26 +16,27 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import { Component } from "react";
 import { app } from "./config";
-import API from "./utils/API";
+// import API from "./utils/API";
 
 function AuthenticatedRoute({ component: Component, authenticated, ...rest }) {
   return (
     <Route
       {...rest}
       render={props =>
-        authenticated === true ? (
+        authenticated === true ? 
           <Component {...props} {...rest} />
-        ) : (
+         : 
           <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-        )
+        
       }
     />
-  );
+  )
 }
 
 class App extends Component {
   constructor() {
     super();
+    this.setCurrentUser = this.setCurrentUser.bind(this);
     this.state = {
       authenticated: false,
       currentUser: null,
@@ -49,12 +50,12 @@ class App extends Component {
       this.setState({
         currentUser: user,
         authenticated: true
-      });
+      })
     } else {
       this.setState({
         currentUser: null,
         authenticated: false
-      });
+      })
     }
   }
 
@@ -67,13 +68,13 @@ class App extends Component {
           loading: false,
           email: user.email
         });
-        API.saveUser({
-          email: this.state.email
-        })
-          .then(
+        // API.saveUser({
+        //   email: this.state.email
+        // })
+        //   .then(
             // res => console.log("this is what res " + res.config.data)
-          )
-          .catch(err => console.log(err));
+          // )
+          // .catch(err => console.log(err));
 
         // console.log("this is the email: " + user.email);
       } else {
@@ -100,16 +101,19 @@ class App extends Component {
     }
     return (
       <Router>
-        <div>
+        {/* <div> */}
           <Container>
             <Nav authenticated={this.state.authenticated} />
             <Switch>
               <Route
                 exact
                 path="/"
-                render={props => {
+                render={(props) => {
                   return (
-                    <Login setCurrentUser={this.setCurrentUser} authenticated={this.state.authenticated} {...props} />
+                    <Login setCurrentUser={this.currentUser} 
+                    authenticated={this.state.authenticated} 
+                    {...props} 
+                    />
                   );
                 }}
               />
@@ -144,6 +148,7 @@ class App extends Component {
                 path="/account"
                 authenticated={this.state.authenticated}
                 component={Account}
+                email={this.state.email}
               />
               <AuthenticatedRoute
                 exact
@@ -153,7 +158,7 @@ class App extends Component {
               />
             </Switch>
           </Container>
-        </div>
+        {/* </div> */}
       </Router>
     );
   }
