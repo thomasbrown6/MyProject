@@ -3,9 +3,11 @@ import MortgageCalculator from "mortgage-calculator-react";
 import "./Mortgage.css";
 import { Col, Row, Wrapper } from "../../components/Grid";
 import axios from "axios";
+import { app } from "../../config";
 
 class Mortgage extends Component {
   state = {
+    email: "",
     tyf: "",
     fyf: "",
     fyj: "",
@@ -13,7 +15,6 @@ class Mortgage extends Component {
     tyj: "",
     oya: ""
   };
-  
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -23,48 +24,68 @@ class Mortgage extends Component {
     });
   };
 
-
   handleFormSubmit = event => {
     event.preventDefault();
-
   };
   componentDidMount() {
-    axios.get("/api/scrape")
-      .then( (results) => {
-        console.log(results)
-        this.setState({
-          fyf : results.data[0].rates[0],
-          tyf : results.data[0].rates[2],
-          fyj : results.data[0].rates[1],
-          fya : results.data[0].rates[5],
-          tyj : results.data[0].rates[3],
-          oya : results.data[0].rates[4],
-        });
-      })
+    axios.get("/api/scrape").then(results => {
+      console.log(results);
+      this.setState({
+        fyf: results.data[0].rates[0],
+        tyf: results.data[0].rates[2],
+        fyj: results.data[0].rates[1],
+        fya: results.data[0].rates[5],
+        tyj: results.data[0].rates[3],
+        oya: results.data[0].rates[4]
+      });
+    });
+  }
 
+  //checks which user is logged in
+  componentWillMount() {
+    this.removeAuthListener = app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true,
+          email: user.email
+        });
+      } else {
+        this.setState({
+          authenticated: false
+        });
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.removeAuthListener();
   }
 
   render() {
     return (
       <Wrapper>
         <Row>
-          <Col size="1">
-
-          </Col>
+          <Col size="1" />
           <Col size="6">
             <div className="mc">
               {/* <MortgageCalculator styles={customStyle} /> */}
               <MortgageCalculator />
-
             </div>
           </Col>
-          <Col size="1">
-
-          </Col>
+          <Col size="1" />
           <Col size="4">
             <div className="qlrates">
               <h4>Today's Mortgage Rates</h4>
-              <p className="ctext">Courtesy of the <a className="findHome" href="https://markets.on.nytimes.com/research/markets/rates/rates.asp" target="_blank" rel="noopener noreferrer">New York Times</a></p>
+              <p className="ctext">
+                Courtesy of the{" "}
+                <a
+                  className="findHome"
+                  href="https://markets.on.nytimes.com/research/markets/rates/rates.asp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  New York Times
+                </a>
+              </p>
               <ul>
                 <li>30 Year Fixed: {this.state.tyf}%</li>
                 <li>15 Year Fixed: {this.state.fyf}%</li>
@@ -74,9 +95,23 @@ class Mortgage extends Component {
                 <li>1 Year ARM: {this.state.oya}%</li>
               </ul>
               <br />
-              <a className="findHome" href="https://www.zillow.com/" target="_blank" rel="noopener noreferrer">Find a Home on Zillow</a>
+              <a
+                className="findHome"
+                href="https://www.zillow.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Find a Home on Zillow
+              </a>
               <br />
-              <a className="findHome" href ="https://www.realtor.com/realestateagents" target="_blank" rel="noopener noreferrer">Find a Realtor</a>
+              <a
+                className="findHome"
+                href="https://www.realtor.com/realestateagents"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Find a Realtor
+              </a>
             </div>
           </Col>
         </Row>

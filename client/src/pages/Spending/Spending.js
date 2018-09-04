@@ -8,7 +8,7 @@ import { app } from "../../config";
 import moment from "moment";
 import Calendar from "react-big-calendar";
 import DatePicker from "react-datepicker";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 // Styles =======================================
 import "./Spending.css";
 import "../Bills/Bills.css";
@@ -22,17 +22,15 @@ Modal.setAppElement("#root");
 
 // Styles for modal
 const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)"
   }
 };
-
-
 
 class Spending extends Component {
   state = {
@@ -57,7 +55,7 @@ class Spending extends Component {
         amount: 0
       }
     ],
-    email:""
+    email: ""
   };
 
   // When the component mounts, load all the spendings into the table
@@ -68,28 +66,28 @@ class Spending extends Component {
   // Loads all the spending from the database
   loadSpendings = () => {
     API.getAllSpending()
-      .then(res => 
-      //Here I added the formula to assign each user with their spending
-      {
-        const filteredSpending=[];
-  
-        for(let i=0;i<res.data.length;i++){
-          if(res.data[i].email===this.state.email){
-            filteredSpending.push(res.data[i]);
+      .then(res =>
+        //Here I added the formula to assign each user with their spending
+        {
+          const filteredSpending = [];
+
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].email === this.state.email) {
+              filteredSpending.push(res.data[i]);
+            }
           }
+
+          const events = filteredSpending.map(event => ({
+            title: event.item,
+            start: moment(event.date).toDate(),
+            end: moment(event.date).toDate(),
+            amount: event.amount,
+            id: event._id,
+            category: event.category
+          }));
+          this.setState({ events });
         }
-
-        const events = filteredSpending.map(event => ({
-          title: event.item,
-          start: moment(event.date).toDate(),
-          end: moment(event.date).toDate(),
-          amount: event.amount,
-          id: event._id,
-          category: event.category
-        }));
-        this.setState({ events });
-
-      })
+      )
       .catch(err => console.error(err));
   };
 
@@ -115,37 +113,37 @@ class Spending extends Component {
   };
 
   //============Methods for modal ================//
-  openModal = (item) => {
+  openModal = item => {
     this.setState({
       modalIsOpen: true,
-      modalItem:{
+      modalItem: {
         id: item.id,
         item: item.title,
         category: item.category,
         amount: item.amount,
         date: item.start
-      } 
+      }
     });
   };
- 
+
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
   };
- 
+
   closeModal = () => {
-    this.setState({modalIsOpen: false});
+    this.setState({ modalIsOpen: false });
   };
 
-    // Delete a spending item from the database
-    deleteSpendItem = event => {
-      event.preventDefault();
-      API.deleteSpending(this.state.modalItem.id)
-        .then(res => {
-          this.closeModal();
-          this.loadSpendings();
-        })
-        .catch(err => console.log(err));
-    };
+  // Delete a spending item from the database
+  deleteSpendItem = event => {
+    event.preventDefault();
+    API.deleteSpending(this.state.modalItem.id)
+      .then(res => {
+        this.closeModal();
+        this.loadSpendings();
+      })
+      .catch(err => console.log(err));
+  };
 
   // Method to show input so user can update item
   // showInput = event => {
@@ -168,7 +166,6 @@ class Spending extends Component {
       this.state.date &&
       this.state.email
     ) {
-
       API.saveSpending({
         item: this.state.item,
         category: this.state.category,
@@ -200,10 +197,9 @@ class Spending extends Component {
           authenticated: true,
           email: user.email
         });
-   
       } else {
         this.setState({
-          authenticated: false,
+          authenticated: false
         });
       }
     });
@@ -301,37 +297,46 @@ class Spending extends Component {
                 step={60}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
-                <Modal
-                  isOpen={this.state.modalIsOpen}
-                  onAfterOpen={this.afterOpenModal}
-                  onRequestClose={this.closeModal}
-                  style={customStyles}
-                  contentLabel="Example Modal"
-                >
-                  <div>
+              <Modal
+                isOpen={this.state.modalIsOpen}
+                onAfterOpen={this.afterOpenModal}
+                onRequestClose={this.closeModal}
+                style={customStyles}
+                contentLabel="Example Modal"
+              >
+                <div>
                   <h2 className="modal-heading">{this.state.modalItem.item}</h2>
-                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
-                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
-                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <p className="modal-details">
+                    Amount: {this.state.modalItem.amount}
+                  </p>
+                  <p className="modal-details">
+                    Category: {this.state.modalItem.category}
+                  </p>
+                  <p className="modal-details">
+                    Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}
+                  </p>
                   <form>
-                  {/* {this.state.modalItem.showInput ? (
+                    {/* {this.state.modalItem.showInput ? (
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" />                     
                   ) : null}
                     <button onClick={this.showInput}>Edit</button> */}
-                    <button className="modal-close" onClick={this.closeModal}>close</button>
-                    <button className="delete-btn" onClick={this.deleteSpendItem}>
-                    delete
+                    <button className="modal-close" onClick={this.closeModal}>
+                      close
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={this.deleteSpendItem}
+                    >
+                      delete
                     </button>
                   </form>
-                  </div>
-                </Modal>
+                </div>
+              </Modal>
             </div>
           </ColMain>
-
-
 
           {/* This is to help mobile responsiveness */}
           <ColMini size="12">
@@ -419,36 +424,46 @@ class Spending extends Component {
                 step={60}
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
-                <Modal
-                  isOpen={this.state.modalIsOpen}
-                  onAfterOpen={this.afterOpenModal}
-                  onRequestClose={this.closeModal}
-                  style={customStyles}
-                  contentLabel="Example Modal"
-                >
-                  <div>
+              <Modal
+                isOpen={this.state.modalIsOpen}
+                onAfterOpen={this.afterOpenModal}
+                onRequestClose={this.closeModal}
+                style={customStyles}
+                contentLabel="Example Modal"
+              >
+                <div>
                   <h2 className="modal-heading">{this.state.modalItem.item}</h2>
-                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
-                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
-                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <p className="modal-details">
+                    Amount: {this.state.modalItem.amount}
+                  </p>
+                  <p className="modal-details">
+                    Category: {this.state.modalItem.category}
+                  </p>
+                  <p className="modal-details">
+                    Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}
+                  </p>
                   <form>
-                  {/* {this.state.modalItem.showInput ? (
+                    {/* {this.state.modalItem.showInput ? (
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" />                     
                   ) : null}
                     <button onClick={this.showInput}>Edit</button> */}
-                    <button className="modal-close" onClick={this.closeModal}>close</button>
-                    <button className="delete-btn" onClick={this.deleteSpendItem}>
-                    delete
+                    <button className="modal-close" onClick={this.closeModal}>
+                      close
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={this.deleteSpendItem}
+                    >
+                      delete
                     </button>
                   </form>
-                  </div>
-                </Modal>
+                </div>
+              </Modal>
             </div>
           </ColMini>
-
         </Row>
       </Wrapper>
     );

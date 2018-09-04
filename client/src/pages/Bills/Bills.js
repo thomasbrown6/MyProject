@@ -146,7 +146,6 @@ class Bills extends Component {
   };
   //==============================================//
 
-
   // Run this function for creating a new bill
   handleFormSubmit = event => {
     event.preventDefault();
@@ -189,10 +188,9 @@ class Bills extends Component {
           authenticated: true,
           email: user.email
         });
-   
       } else {
         this.setState({
-          authenticated: false,
+          authenticated: false
         });
       }
     });
@@ -265,7 +263,7 @@ class Bills extends Component {
                     this.state.item &&
                     this.state.category &&
                     this.state.amount &&
-                    this.state.date 
+                    this.state.date
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -288,35 +286,42 @@ class Bills extends Component {
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
               <Modal
-                  isOpen={this.state.modalIsOpen}
-                  onAfterOpen={this.afterOpenModal}
-                  onRequestClose={this.closeModal}
-                  style={customStyles}
-                  contentLabel="Example Modal"
-                >
-                  <div>
+                isOpen={this.state.modalIsOpen}
+                onAfterOpen={this.afterOpenModal}
+                onRequestClose={this.closeModal}
+                style={customStyles}
+                contentLabel="Example Modal"
+              >
+                <div>
                   <h2 className="modal-heading">{this.state.modalItem.item}</h2>
-                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
-                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
-                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <p className="modal-details">
+                    Amount: {this.state.modalItem.amount}
+                  </p>
+                  <p className="modal-details">
+                    Category: {this.state.modalItem.category}
+                  </p>
+                  <p className="modal-details">
+                    Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}
+                  </p>
                   <form>
-                  {/* {this.state.modalItem.showInput ? (
+                    {/* {this.state.modalItem.showInput ? (
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" />                     
                   ) : null}
                     <button onClick={this.showInput}>Edit</button> */}
-                    <button className="modal-close" onClick={this.closeModal}>close</button>
+                    <button className="modal-close" onClick={this.closeModal}>
+                      close
+                    </button>
                     <button className="delete-btn" onClick={this.deleteBill}>
-                    delete
+                      delete
                     </button>
                   </form>
-                  </div>
-                </Modal>
+                </div>
+              </Modal>
             </div>
           </ColMain>
-
 
           <ColMini size="12">
             <form>
@@ -378,7 +383,7 @@ class Bills extends Component {
                     this.state.item &&
                     this.state.category &&
                     this.state.amount &&
-                    this.state.date 
+                    this.state.date
                   )
                 }
                 onClick={this.handleFormSubmit}
@@ -401,32 +406,40 @@ class Bills extends Component {
                 style={{ height: "75vh", width: "100%", float: "right" }}
               />
               <Modal
-                  isOpen={this.state.modalIsOpen}
-                  onAfterOpen={this.afterOpenModal}
-                  onRequestClose={this.closeModal}
-                  style={customStyles}
-                  contentLabel="Example Modal"
-                >
-                  <div>
+                isOpen={this.state.modalIsOpen}
+                onAfterOpen={this.afterOpenModal}
+                onRequestClose={this.closeModal}
+                style={customStyles}
+                contentLabel="Example Modal"
+              >
+                <div>
                   <h2 className="modal-heading">{this.state.modalItem.item}</h2>
-                  <p className="modal-details">Amount: {this.state.modalItem.amount}</p>
-                  <p className="modal-details">Category: {this.state.modalItem.category}</p>
-                  <p className="modal-details">Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}</p>
+                  <p className="modal-details">
+                    Amount: {this.state.modalItem.amount}
+                  </p>
+                  <p className="modal-details">
+                    Category: {this.state.modalItem.category}
+                  </p>
+                  <p className="modal-details">
+                    Date: {moment(this.state.modalItem.date).format("MM-DD-YY")}
+                  </p>
                   <form>
-                  {/* {this.state.modalItem.showInput ? (
+                    {/* {this.state.modalItem.showInput ? (
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" /> 
                     <input className="form-control" placeholder="item" />                     
                   ) : null}
                     <button onClick={this.showInput}>Edit</button> */}
-                    <button className="modal-close" onClick={this.closeModal}>close</button>
+                    <button className="modal-close" onClick={this.closeModal}>
+                      close
+                    </button>
                     <button className="delete-btn" onClick={this.deleteBill}>
-                    delete
+                      delete
                     </button>
                   </form>
-                  </div>
-                </Modal>
+                </div>
+              </Modal>
             </div>
           </ColMini>
         </Row>

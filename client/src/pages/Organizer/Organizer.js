@@ -261,10 +261,9 @@ class Organizer extends Component {
           authenticated: true,
           email: user.email
         });
-   
       } else {
         this.setState({
-          authenticated: false,
+          authenticated: false
         });
       }
     });
@@ -344,8 +343,9 @@ class Organizer extends Component {
               title="Spending"
               cardCategory=""
               data={
-                (this.populatePieGraph(1)===0)?
-                this.state.emptyPieChart:this.state.spendingPieChart
+                this.populatePieGraph(1) === 0
+                  ? this.state.emptyPieChart
+                  : this.state.spendingPieChart
               }
             />
           </Col>
@@ -354,8 +354,9 @@ class Organizer extends Component {
               title="Bills"
               cardCategory=""
               data={
-                (this.populatePieGraph(2)===0)?
-                this.state.emptyPieChart:this.state.billsPieChart
+                this.populatePieGraph(2) === 0
+                  ? this.state.emptyPieChart
+                  : this.state.billsPieChart
               }
             />
             <Card title="Upcoming Bills" />

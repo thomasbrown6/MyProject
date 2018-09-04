@@ -62,10 +62,9 @@ class Account extends Component {
           authenticated: true,
           email: user.email
         });
-   
       } else {
         this.setState({
-          authenticated: false,
+          authenticated: false
         });
       }
     });
