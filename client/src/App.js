@@ -70,10 +70,12 @@ class App extends Component {
         API.saveUser({
           email: this.state.email
         })
-          .then(res => console.log("this is what res " + res.config.data))
+          .then(
+            // res => console.log("this is what res " + res.config.data)
+          )
           .catch(err => console.log(err));
 
-        console.log("this is the email: " + user.email);
+        // console.log("this is the email: " + user.email);
       } else {
         this.setState({
           authenticated: false,
