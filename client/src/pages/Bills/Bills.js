@@ -183,14 +183,22 @@ class Bills extends Component {
 
   //sets the user for the bill
   componentWillMount() {
-    app.auth().onAuthStateChanged(user => {
+    this.removeAuthListener = app.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           authenticated: true,
           email: user.email
         });
+   
+      } else {
+        this.setState({
+          authenticated: false,
+        });
       }
     });
+  }
+  componentWillUnmount() {
+    this.removeAuthListener();
   }
 
   render() {

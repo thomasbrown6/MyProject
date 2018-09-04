@@ -255,14 +255,22 @@ class Organizer extends Component {
 
   //checks which user is logged in
   componentWillMount() {
-    app.auth().onAuthStateChanged(user => {
+    this.removeAuthListener = app.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           authenticated: true,
           email: user.email
         });
+   
+      } else {
+        this.setState({
+          authenticated: false,
+        });
       }
     });
+  }
+  componentWillUnmount() {
+    this.removeAuthListener();
   }
 
   populatePieGraph = arrNum => {
@@ -306,19 +314,19 @@ class Organizer extends Component {
               <Card
                 title={this.state.month + ` Income`}
                 body1={
-                  isNaN(parseInt(this.state.monthlyIncome))
+                  isNaN(parseFloat(this.state.monthlyIncome))
                     ? `$0.00`
-                    : `$` + parseInt(this.state.monthlyIncome, 10).toFixed(2)
+                    : `$` + parseFloat(this.state.monthlyIncome, 10).toFixed(2)
                 }
               />
             </div>
             <Card
               title={this.state.month + ` Budget`}
               body1={
-                isNaN(parseInt(this.state.monthlyIncome))
+                isNaN(parseFloat(this.state.monthlyIncome))
                   ? `Income:   $0.00`
                   : `Income:    +$` +
-                    parseInt(this.state.monthlyIncome, 10).toFixed(2)
+                    parseFloat(this.state.monthlyIncome, 10).toFixed(2)
               }
               body2={`Spending:  -$` + this.state.spendingTotal.toFixed(2)}
               body3={`Bills:     -$` + this.state.billsTotal.toFixed(2)}

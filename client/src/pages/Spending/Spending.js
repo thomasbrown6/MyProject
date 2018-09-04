@@ -194,14 +194,22 @@ class Spending extends Component {
 
   //get the email the user used to log in
   componentWillMount() {
-    app.auth().onAuthStateChanged(user => {
+    this.removeAuthListener = app.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           authenticated: true,
           email: user.email
         });
+   
+      } else {
+        this.setState({
+          authenticated: false,
+        });
       }
     });
+  }
+  componentWillUnmount() {
+    this.removeAuthListener();
   }
 
   render() {
