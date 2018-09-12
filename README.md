@@ -4,19 +4,20 @@ This is a financial planner that allows the user to organize their bills and spe
 <br>
 Deployed Application:https://stormy-everglades-57851.herokuapp.com/
 <br>
+<br>
 If you want to log into an already set up account, then use the following login info:
 <br>
-Email:
+Email:  aaa5488895@gmail.com
 <br>
-aaa5488895@gmail.com
+Password: password
 <br>
-Password:
 <br>
-password
 <br>
 <img width="1352" alt="screen shot 2018-09-04 at 8 42 46 pm" src="https://user-images.githubusercontent.com/22462010/45064724-58b10280-b083-11e8-9b93-74d14bf5a1ed.png">
 <br>
+<br>
 Organizer:
+<br>
 <br>
 The monthly organizer displays upcoming bills. Also, it provides the user with some graphs to picture how much is being spent for each category. There is a simple budget card to show how much the user is saving after bills and spending is subtracted from their monthly income.
 <br>
