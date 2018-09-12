@@ -85,7 +85,7 @@
   }
 
 }
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 414px) {
   .rbc-toolbar-label{
     margin: 0% !important;
     padding: 0% !important;
