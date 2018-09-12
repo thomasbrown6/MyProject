@@ -41,7 +41,7 @@ class Account extends Component {
       .catch(err => console.error(err));
 
     API.getIncomes().then(res => {
-      console.log(res.data[0].amount);
+      // console.log(res.data[0].amount);
       let amount = res.data[0].amount;
       this.setState({ income: "$" + amount });
     });
