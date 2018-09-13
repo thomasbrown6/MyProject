@@ -76,17 +76,15 @@
 
 /* Media Queries */
 @media only screen and (max-width: 1200px) {
-
   .hideFirst {
-      display: inline;
+    display: inline;
   }
   .hideSecond {
-      display: none;
+    display: none;
   }
-
 }
 @media only screen and (max-width: 414px) {
-  .rbc-toolbar-label{
+  .rbc-toolbar-label {
     margin: 0% !important;
     padding: 0% !important;
   }
@@ -94,5 +92,9 @@
     margin: 5% 10% 5% 5% !important;
     display: block !important;
     width: 90% !important;
+  }
+
+  .ReactModal__Content--after-open {
+    width: 290px !important;
   }
 }
